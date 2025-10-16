@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             this.groupBox_event_info = new System.Windows.Forms.GroupBox();
-            this.label_event_id = new System.Windows.Forms.Label();
-            this.txt_event_id = new System.Windows.Forms.TextBox();
-            this.label_event_name = new System.Windows.Forms.Label();
-            this.txt_event_name = new System.Windows.Forms.TextBox();
-            this.label_event_date = new System.Windows.Forms.Label();
-            this.dtp_event_date = new System.Windows.Forms.DateTimePicker();
-            this.label_description = new System.Windows.Forms.Label();
-            this.txt_description = new System.Windows.Forms.TextBox();
-            this.label_participants = new System.Windows.Forms.Label();
             this.txt_participants = new System.Windows.Forms.TextBox();
+            this.label_participants = new System.Windows.Forms.Label();
+            this.txt_description = new System.Windows.Forms.TextBox();
+            this.label_description = new System.Windows.Forms.Label();
+            this.dtp_event_date = new System.Windows.Forms.DateTimePicker();
+            this.label_event_date = new System.Windows.Forms.Label();
+            this.txt_event_name = new System.Windows.Forms.TextBox();
+            this.label_event_name = new System.Windows.Forms.Label();
+            this.txt_event_id = new System.Windows.Forms.TextBox();
+            this.label_event_id = new System.Windows.Forms.Label();
             this.btn_update = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();
             this.label_title = new System.Windows.Forms.Label();
@@ -65,66 +65,24 @@
             this.groupBox_event_info.TabStop = false;
             this.groupBox_event_info.Text = "Thông tin sự kiện";
             // 
-            // label_event_id
+            // txt_participants
             // 
-            this.label_event_id.AutoSize = true;
-            this.label_event_id.Location = new System.Drawing.Point(20, 35);
-            this.label_event_id.Name = "label_event_id";
-            this.label_event_id.Size = new System.Drawing.Size(29, 23);
-            this.label_event_id.TabIndex = 0;
-            this.label_event_id.Text = "ID:";
+            this.txt_participants.BackColor = System.Drawing.Color.LightGray;
+            this.txt_participants.Enabled = false;
+            this.txt_participants.Location = new System.Drawing.Point(150, 267);
+            this.txt_participants.Name = "txt_participants";
+            this.txt_participants.ReadOnly = true;
+            this.txt_participants.Size = new System.Drawing.Size(100, 30);
+            this.txt_participants.TabIndex = 9;
             // 
-            // txt_event_id
+            // label_participants
             // 
-            this.txt_event_id.BackColor = System.Drawing.Color.LightGray;
-            this.txt_event_id.Location = new System.Drawing.Point(150, 32);
-            this.txt_event_id.Name = "txt_event_id";
-            this.txt_event_id.ReadOnly = true;
-            this.txt_event_id.Size = new System.Drawing.Size(100, 30);
-            this.txt_event_id.TabIndex = 1;
-            // 
-            // label_event_name
-            // 
-            this.label_event_name.AutoSize = true;
-            this.label_event_name.Location = new System.Drawing.Point(20, 75);
-            this.label_event_name.Name = "label_event_name";
-            this.label_event_name.Size = new System.Drawing.Size(110, 23);
-            this.label_event_name.TabIndex = 2;
-            this.label_event_name.Text = "Tên sự kiện:*";
-            // 
-            // txt_event_name
-            // 
-            this.txt_event_name.Location = new System.Drawing.Point(150, 72);
-            this.txt_event_name.MaxLength = 255;
-            this.txt_event_name.Name = "txt_event_name";
-            this.txt_event_name.Size = new System.Drawing.Size(350, 30);
-            this.txt_event_name.TabIndex = 3;
-            // 
-            // label_event_date
-            // 
-            this.label_event_date.AutoSize = true;
-            this.label_event_date.Location = new System.Drawing.Point(20, 115);
-            this.label_event_date.Name = "label_event_date";
-            this.label_event_date.Size = new System.Drawing.Size(124, 23);
-            this.label_event_date.TabIndex = 4;
-            this.label_event_date.Text = "Ngày tổ chức:*";
-            // 
-            // dtp_event_date
-            // 
-            this.dtp_event_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtp_event_date.Location = new System.Drawing.Point(150, 112);
-            this.dtp_event_date.Name = "dtp_event_date";
-            this.dtp_event_date.Size = new System.Drawing.Size(200, 30);
-            this.dtp_event_date.TabIndex = 5;
-            // 
-            // label_description
-            // 
-            this.label_description.AutoSize = true;
-            this.label_description.Location = new System.Drawing.Point(20, 155);
-            this.label_description.Name = "label_description";
-            this.label_description.Size = new System.Drawing.Size(62, 23);
-            this.label_description.TabIndex = 6;
-            this.label_description.Text = "Mô tả:";
+            this.label_participants.AutoSize = true;
+            this.label_participants.Location = new System.Drawing.Point(20, 270);
+            this.label_participants.Name = "label_participants";
+            this.label_participants.Size = new System.Drawing.Size(107, 23);
+            this.label_participants.TabIndex = 8;
+            this.label_participants.Text = "Số lượng TG:";
             // 
             // txt_description
             // 
@@ -135,23 +93,67 @@
             this.txt_description.Size = new System.Drawing.Size(350, 100);
             this.txt_description.TabIndex = 7;
             // 
-            // label_participants
+            // label_description
             // 
-            this.label_participants.AutoSize = true;
-            this.label_participants.Location = new System.Drawing.Point(20, 270);
-            this.label_participants.Name = "label_participants";
-            this.label_participants.Size = new System.Drawing.Size(99, 23);
-            this.label_participants.TabIndex = 8;
-            this.label_participants.Text = "Số lượng TG:";
+            this.label_description.AutoSize = true;
+            this.label_description.Location = new System.Drawing.Point(20, 155);
+            this.label_description.Name = "label_description";
+            this.label_description.Size = new System.Drawing.Size(59, 23);
+            this.label_description.TabIndex = 6;
+            this.label_description.Text = "Mô tả:";
             // 
-            // txt_participants
+            // dtp_event_date
             // 
-            this.txt_participants.BackColor = System.Drawing.Color.LightGray;
-            this.txt_participants.Location = new System.Drawing.Point(150, 267);
-            this.txt_participants.Name = "txt_participants";
-            this.txt_participants.ReadOnly = true;
-            this.txt_participants.Size = new System.Drawing.Size(100, 30);
-            this.txt_participants.TabIndex = 9;
+            this.dtp_event_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtp_event_date.Location = new System.Drawing.Point(150, 112);
+            this.dtp_event_date.Name = "dtp_event_date";
+            this.dtp_event_date.Size = new System.Drawing.Size(200, 30);
+            this.dtp_event_date.TabIndex = 5;
+            // 
+            // label_event_date
+            // 
+            this.label_event_date.AutoSize = true;
+            this.label_event_date.Location = new System.Drawing.Point(20, 115);
+            this.label_event_date.Name = "label_event_date";
+            this.label_event_date.Size = new System.Drawing.Size(123, 23);
+            this.label_event_date.TabIndex = 4;
+            this.label_event_date.Text = "Ngày tổ chức:*";
+            // 
+            // txt_event_name
+            // 
+            this.txt_event_name.Location = new System.Drawing.Point(150, 72);
+            this.txt_event_name.MaxLength = 255;
+            this.txt_event_name.Name = "txt_event_name";
+            this.txt_event_name.Size = new System.Drawing.Size(350, 30);
+            this.txt_event_name.TabIndex = 3;
+            // 
+            // label_event_name
+            // 
+            this.label_event_name.AutoSize = true;
+            this.label_event_name.Location = new System.Drawing.Point(20, 75);
+            this.label_event_name.Name = "label_event_name";
+            this.label_event_name.Size = new System.Drawing.Size(105, 23);
+            this.label_event_name.TabIndex = 2;
+            this.label_event_name.Text = "Tên sự kiện:*";
+            // 
+            // txt_event_id
+            // 
+            this.txt_event_id.BackColor = System.Drawing.Color.LightGray;
+            this.txt_event_id.Enabled = false;
+            this.txt_event_id.Location = new System.Drawing.Point(150, 32);
+            this.txt_event_id.Name = "txt_event_id";
+            this.txt_event_id.ReadOnly = true;
+            this.txt_event_id.Size = new System.Drawing.Size(100, 30);
+            this.txt_event_id.TabIndex = 1;
+            // 
+            // label_event_id
+            // 
+            this.label_event_id.AutoSize = true;
+            this.label_event_id.Location = new System.Drawing.Point(20, 35);
+            this.label_event_id.Name = "label_event_id";
+            this.label_event_id.Size = new System.Drawing.Size(31, 23);
+            this.label_event_id.TabIndex = 0;
+            this.label_event_id.Text = "ID:";
             // 
             // btn_update
             // 
@@ -186,7 +188,7 @@
             this.label_title.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(123)))), ((int)(((byte)(255)))));
             this.label_title.Location = new System.Drawing.Point(200, 20);
             this.label_title.Name = "label_title";
-            this.label_title.Size = new System.Drawing.Size(200, 38);
+            this.label_title.Size = new System.Drawing.Size(237, 38);
             this.label_title.TabIndex = 3;
             this.label_title.Text = "Cập nhật sự kiện";
             // 

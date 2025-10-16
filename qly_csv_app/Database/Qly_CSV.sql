@@ -412,7 +412,9 @@ LEFT JOIN Khoa kh ON n.khoa_id = kh.khoa_id;
 
 delete from [User] where user_id = 11
 
-select * from Participation
+select * from Participation p 
+join Event e on e.event_id = p.event_id
+where e.event_id = 6
 
 select * from CuuSV
 
@@ -420,6 +422,27 @@ select * from [User]
 
 select * from Contribution
 
+SELECT c.contribution_id, c.contribution_type, c.amount, 
+       c.contribution_date, c.details, csv.Ten as contributor_name,
+       p.participation_date, p.status as participation_status,
+	   p.event_id
+FROM Contribution c
+JOIN CuuSV csv ON c.CSV_id = csv.CSV_id
+JOIN Participation p ON c.CSV_id = p.CSV_id AND p.event_id = 8
+WHERE c.CSV_id = 10
+ORDER BY c.contribution_date DESC
+
+-- Thêm cột event_id vào bảng Contribution
+ALTER TABLE Contribution 
+ADD event_id INT;
+
+-- Thêm foreign key constraint
+ALTER TABLE Contribution 
+ADD CONSTRAINT FK_Contribution_Event 
+FOREIGN KEY (event_id) REFERENCES Event(event_id);
+
+-- Cập nhật dữ liệu hiện có (nếu có) - tùy chọn
+-- Bạn có thể để NULL hoặc cập nhật dựa trên logic nghiệp vụ
 
 GO
 --Xóa bảng

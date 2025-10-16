@@ -89,27 +89,35 @@ namespace qly_csv_app.UI
                         {
                             // Load contributions for specific user and specific event
                             // Cải tiến logic để chỉ lấy đóng góp liên quan đến sự kiện cụ thể
+                            //query = @"SELECT c.contribution_id, c.contribution_type, c.amount, 
+                            //                c.contribution_date, c.details, csv.Ten as contributor_name
+                            //         FROM Contribution c
+                            //         INNER JOIN CuuSV csv ON c.CSV_id = csv.CSV_id
+                            //         WHERE c.CSV_id = @csv_id 
+                            //         AND (
+                            //             -- Đóng góp được tạo sau khi chấp nhận tham gia sự kiện
+                            //             c.contribution_date >= (
+                            //                 SELECT p.participation_date 
+                            //                 FROM Participation p 
+                            //                 WHERE p.CSV_id = c.CSV_id 
+                            //                 AND p.event_id = @event_id 
+                            //                 AND p.status = N'Chấp nhận'
+                            //             )
+                            //             OR 
+                            //             -- Đóng góp trong khoảng thời gian gần sự kiện (30 ngày trước đến 7 ngày sau)
+                            //             c.contribution_date BETWEEN 
+                            //                 DATEADD(day, -30, (SELECT event_date FROM Event WHERE event_id = @event_id)) 
+                            //                 AND 
+                            //                 DATEADD(day, 7, (SELECT event_date FROM Event WHERE event_id = @event_id))
+                            //         )";
                             query = @"SELECT c.contribution_id, c.contribution_type, c.amount, 
-                                            c.contribution_date, c.details, csv.Ten as contributor_name
+                                            c.contribution_date, c.details, csv.Ten as contributor_name,
+                                            e.event_name
                                      FROM Contribution c
                                      INNER JOIN CuuSV csv ON c.CSV_id = csv.CSV_id
+                                     INNER JOIN Event e ON c.event_id = e.event_id
                                      WHERE c.CSV_id = @csv_id 
-                                     AND (
-                                         -- Đóng góp được tạo sau khi chấp nhận tham gia sự kiện
-                                         c.contribution_date >= (
-                                             SELECT p.participation_date 
-                                             FROM Participation p 
-                                             WHERE p.CSV_id = c.CSV_id 
-                                             AND p.event_id = @event_id 
-                                             AND p.status = N'Chấp nhận'
-                                         )
-                                         OR 
-                                         -- Đóng góp trong khoảng thời gian gần sự kiện (30 ngày trước đến 7 ngày sau)
-                                         c.contribution_date BETWEEN 
-                                             DATEADD(day, -30, (SELECT event_date FROM Event WHERE event_id = @event_id)) 
-                                             AND 
-                                             DATEADD(day, 7, (SELECT event_date FROM Event WHERE event_id = @event_id))
-                                     )";
+                                     AND c.event_id = @event_id";
 
                             // Add filter condition
                             if (cmb_filter.SelectedItem != null && cmb_filter.SelectedItem.ToString() != "Tất cả")

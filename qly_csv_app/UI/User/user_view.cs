@@ -18,6 +18,7 @@ namespace qly_csv_app.UI.User
         private int currentUserId;
         private int currentCsvId;
         private string currentUserName;
+        private int eventId;
 
         public user_view()
         {
@@ -30,7 +31,6 @@ namespace qly_csv_app.UI.User
             currentUserId = userId;
             currentUserName = userName;
             
-            // Prevent label text wrapping and ensure it fits within the sidebar
             SetWelcomeText(userName);
         }
 
@@ -39,7 +39,7 @@ namespace qly_csv_app.UI.User
             string welcomeText = $"Xin chào,\n{userName}";
             
             lbl_welcome.AutoSize = false;
-            lbl_welcome.Size = new Size(190, 60); // Fixed size within sidebar width
+            lbl_welcome.Size = new Size(190, 60); 
             lbl_welcome.TextAlign = ContentAlignment.TopLeft;
             
             lbl_welcome.Text = welcomeText;
@@ -141,7 +141,8 @@ namespace qly_csv_app.UI.User
         private void ShowEventContributionInfo(int eventId, string eventName)
         {
             // Xóa tham số eventName vì không còn liên kết sự kiện cụ thể
-            contribute_view.ShowUserContributions(currentCsvId, currentUserName);
+            //contribute_view.ShowUserContributions(currentCsvId, currentUserName);
+            contribute_view.ShowUserContributionsForEvent(currentCsvId, currentUserName, eventId, eventName);
         }
 
 
@@ -691,8 +692,8 @@ namespace qly_csv_app.UI.User
                     // First update the participation status
                     if (UpdateParticipationInDatabase(participationId, newStatus))
                     {
-                        // Xóa tham số eventId vì không còn cần thiết
-                        donggop_view contributionForm = new donggop_view(currentCsvId, eventName, participationId);
+                        int eventId = GetEventIdFromParticipation(participationId);
+                        donggop_view contributionForm = new donggop_view(currentCsvId, eventName, participationId, eventId);
                         DialogResult contributionResult = contributionForm.ShowDialog();
                         
                         if (contributionResult == DialogResult.Cancel)
@@ -730,6 +731,27 @@ namespace qly_csv_app.UI.User
             {
                 MessageBox.Show("Lỗi khi cập nhật trạng thái: " + ex.Message, "Lỗi", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private int GetEventIdFromParticipation(int participationId)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = "SELECT event_id FROM Participation WHERE participation_id = @participation_id";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@participation_id", participationId);
+
+                    object result = command.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+            catch
+            {
+                return 0;
             }
         }
 

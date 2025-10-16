@@ -19,6 +19,7 @@ namespace qly_csv_app.UI.User
         private int csvId;
         private string eventName;
         private int participationId;
+        private int eventId;
 
         public donggop_view()
         {
@@ -30,6 +31,14 @@ namespace qly_csv_app.UI.User
             this.csvId = csvId;
             this.eventName = eventName;
             this.participationId = participationId;
+        }
+
+        public donggop_view(int csvId, string eventName, int participationId, int eventId) : this(csvId, eventName, participationId)
+        {
+            this.csvId = csvId;
+            this.eventName = eventName;
+            this.participationId = participationId;
+            this.eventId = eventId;
         }
 
         private void donggop_view_Load(object sender, EventArgs e)
@@ -149,8 +158,8 @@ namespace qly_csv_app.UI.User
                 {
                     connection.Open();
 
-                    string query = @"INSERT INTO Contribution (CSV_id, contribution_type, amount, contribution_date, details) 
-                                    VALUES (@CSV_id, @contribution_type, @amount, @contribution_date, @details)";
+                    string query = @"INSERT INTO Contribution (CSV_id, contribution_type, amount, contribution_date, details, event_id) 
+                                    VALUES (@CSV_id, @contribution_type, @amount, @contribution_date, @details, @event_id)";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@CSV_id", csvId);
@@ -158,6 +167,7 @@ namespace qly_csv_app.UI.User
                     command.Parameters.AddWithValue("@amount", amount);
                     command.Parameters.AddWithValue("@contribution_date", DateTime.Now);
                     command.Parameters.AddWithValue("@details", string.IsNullOrEmpty(details) ? (object)DBNull.Value : details);
+                    command.Parameters.AddWithValue("@event_id", eventId);
 
                     int result = command.ExecuteNonQuery();
                     

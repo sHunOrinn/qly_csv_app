@@ -473,6 +473,12 @@ namespace qly_csv_app.UI.Admin
                     {
                         try
                         {
+                            // Xóa tất cả đóng góp liên quan đến sự kiện trước
+                            string deleteContributionQuery = "DELETE FROM Contribution WHERE event_id = @event_id";
+                            SqlCommand deleteContributionCmd = new SqlCommand(deleteContributionQuery, connection, transaction);
+                            deleteContributionCmd.Parameters.AddWithValue("@event_id", eventId);
+                            deleteContributionCmd.ExecuteNonQuery();
+
                             // Xóa tất cả participation trước
                             string deleteParticipationQuery = "DELETE FROM Participation WHERE event_id = @event_id";
                             SqlCommand deleteParticipationCmd = new SqlCommand(deleteParticipationQuery, connection, transaction);
