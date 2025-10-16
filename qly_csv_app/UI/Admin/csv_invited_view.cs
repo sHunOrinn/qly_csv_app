@@ -174,49 +174,50 @@ namespace qly_csv_app.UI.Admin
 
         private void ShowContributionsForThisEvent(int csvId, string csvName, int eventId)
         {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectString))
-                {
-                    connection.Open();
-                    
-                    // Tìm đóng góp liên quan đến sự kiện này
-                    string query = @"
-                        SELECT c.contribution_id, c.contribution_type, c.amount, 
-                               c.contribution_date, c.details, csv.Ten as contributor_name,
-                               p.participation_date, p.status as participation_status,
-	                           p.event_id
-                        FROM Contribution c
-                        JOIN CuuSV csv ON c.CSV_id = csv.CSV_id
-                        JOIN Participation p ON c.CSV_id = p.CSV_id AND p.event_id = @event_id
-                        WHERE c.CSV_id = @csv_id
-                        ORDER BY c.contribution_date DESC";
-                    
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@csv_id", csvId);
-                    command.Parameters.AddWithValue("@event_id", eventId);
-                    
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataTable contributionTable = new DataTable();
-                    adapter.Fill(contributionTable);
-                    
-                    if (contributionTable.Rows.Count > 0)
-                    {
-                        // Có đóng góp, hiển thị form contribute_view với dữ liệu cụ thể
-                        ShowCustomContributionView(csvId, csvName, contributionTable);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"{csvName} chưa có đóng góp nào cho sự kiện '{eventName}'.", 
-                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải thông tin đóng góp: " + ex.Message, "Lỗi", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            contribute_view.ShowUserContributionsForEvent(csvId, csvName, eventId, eventName);
+            //try
+            //{
+            //    using (SqlConnection connection = new SqlConnection(connectString))
+            //    {
+            //        connection.Open();
+
+            //        // Tìm đóng góp liên quan đến sự kiện này
+            //        string query = @"
+            //            SELECT c.contribution_id, c.contribution_type, c.amount, 
+            //                   c.contribution_date, c.details, csv.Ten as contributor_name,
+            //                   p.participation_date, p.status as participation_status,
+            //                p.event_id
+            //            FROM Contribution c
+            //            JOIN CuuSV csv ON c.CSV_id = csv.CSV_id
+            //            JOIN Participation p ON c.CSV_id = p.CSV_id AND p.event_id = @event_id
+            //            WHERE c.CSV_id = @csv_id
+            //            ORDER BY c.contribution_date DESC";
+
+            //        SqlCommand command = new SqlCommand(query, connection);
+            //        command.Parameters.AddWithValue("@csv_id", csvId);
+            //        command.Parameters.AddWithValue("@event_id", eventId);
+
+            //        SqlDataAdapter adapter = new SqlDataAdapter(command);
+            //        DataTable contributionTable = new DataTable();
+            //        adapter.Fill(contributionTable);
+
+            //        if (contributionTable.Rows.Count > 0)
+            //        {
+            //            // Có đóng góp, hiển thị form contribute_view với dữ liệu cụ thể
+            //            ShowCustomContributionView(csvId, csvName, contributionTable);
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show($"{csvName} chưa có đóng góp nào cho sự kiện '{eventName}'.", 
+            //                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Lỗi khi tải thông tin đóng góp: " + ex.Message, "Lỗi", 
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private void ShowCustomContributionView(int csvId, string csvName, DataTable contributionData)

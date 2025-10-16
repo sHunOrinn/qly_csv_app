@@ -138,21 +138,51 @@ namespace qly_csv_app.UI.Admin
 
         private void admin_view_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'quanLy_CSVDataSet.Event' table. You can move, or remove it, as needed.
-            this.eventTableAdapter.Fill(this.quanLy_CSVDataSet.Event);
-            // TODO: This line of code loads data into the 'quanLy_CSVDataSet.CuuSV' table. You can move, or remove it, as needed.
-            this.cuuSVTableAdapter.Fill(this.quanLy_CSVDataSet.CuuSV);
-            // Lưu trữ dữ liệu gốc để tìm kiếm
-            originalDataTable = this.quanLy_CSVDataSet.CuuSV.Copy();
+            // TODO: This line of code loads data into the 'quanLy_CSVDataSet.Khoa' table. You can move, or remove it, as needed.
+            this.khoaTableAdapter.Fill(this.quanLy_CSVDataSet.Khoa);
+            try
+            {
+                LoadCuuSVData();
+                
+                LoadEventData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi khởi tạo form: " + ex.Message, "Lỗi", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadCuuSVData()
         {
             try
             {
-                this.cuuSVTableAdapter.Fill(this.quanLy_CSVDataSet.CuuSV);
-                originalDataTable = this.quanLy_CSVDataSet.CuuSV.Copy();
-                txt_timkiem.Clear(); // Xóa text tìm kiếm
+                //this.cuuSVTableAdapter.Fill(this.quanLy_CSVDataSet.CuuSV);
+                //originalDataTable = this.quanLy_CSVDataSet.CuuSV.Copy();
+                //txt_timkiem.Clear(); // Xóa text tìm kiếm
+                SqlConnection connection = new SqlConnection(connectString);
+                connection.Open();
+                string query = @"SELECT c.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone,
+                                   kh.ten_khoa_hoc, n.ten_nganh, k.ten_khoa
+                            FROM CuuSV c
+                            LEFT JOIN KhoaHoc kh ON c.khoa_hoc_id = kh.khoa_hoc_id
+                            LEFT JOIN Nganh n ON kh.nganh_id = n.nganh_id
+                            LEFT JOIN Khoa k ON n.khoa_id = k.khoa_id
+                            ORDER BY c.Ten";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                dataGridView1.DataSource = dataTable;
+
+                originalDataTable = dataTable.Copy();
+
+                FilterCuuSVByKhoa();
+
+                ConfigureCuuSVDataGridView();
+
+                txt_timkiem.Clear();
             }
             catch (Exception ex)
             {
@@ -160,34 +190,242 @@ namespace qly_csv_app.UI.Admin
             }
         }
 
+        //lọc các cựu sinh viên theo khoa
+        private void comboBox_fillkhoa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBox_fillkhoa.SelectedItem == null)
+                    return;
+
+                FilterCuuSVByKhoa();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lọc dữ liệu: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void FilterCuuSVByKhoa()
+        {
+            try
+            {
+                if (originalDataTable == null || originalDataTable.Rows.Count == 0)
+                {
+                    LoadCuuSVData(); // Load lại dữ liệu nếu chưa có
+                    return;
+                }
+
+                DataView dv = new DataView(originalDataTable);
+
+                // Kiểm tra giá trị được chọn
+                if (comboBox_fillkhoa.SelectedValue == null ||
+                    comboBox_fillkhoa.SelectedValue == DBNull.Value ||
+                    comboBox_fillkhoa.SelectedIndex == 0)
+                {
+                    // Hiển thị tất cả cựu sinh viên
+                    dv.RowFilter = string.Empty;
+                }
+                else
+                {
+                    // Lọc theo khoa được chọn
+                    DataRowView selectedRow = (DataRowView)comboBox_fillkhoa.SelectedItem;
+                    string selectedKhoaName = selectedRow["ten_khoa"].ToString();
+
+                    // Lọc theo tên khoa (xử lý trường hợp null)
+                    dv.RowFilter = $"ten_khoa IS NOT NULL AND ten_khoa = '{selectedKhoaName.Replace("'", "''")}'";
+                }
+
+                // Cập nhật DataGridView
+                dataGridView1.DataSource = dv.ToTable();
+
+                // Hiển thị thông tin số lượng
+                int totalCount = dv.Count;
+                string filterInfo = comboBox_fillkhoa.SelectedIndex == 0 || comboBox_fillkhoa.SelectedValue == DBNull.Value
+                    ? "Tất cả khoa"
+                    : ((DataRowView)comboBox_fillkhoa.SelectedItem)["ten_khoa"].ToString();
+
+                label2.Text = $"Danh sách cựu SV ({filterInfo}: {totalCount} người)";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi áp dụng bộ lọc: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Fallback: hiển thị tất cả dữ liệu
+                if (originalDataTable != null)
+                {
+                    dataGridView1.DataSource = originalDataTable;
+                }
+            }
+        }
+
+        private void ConfigureCuuSVDataGridView()
+        {
+            try
+            {
+                // Thiết lập AutoGenerateColumns = false để tự quản lý columns
+                dataGridView1.AutoGenerateColumns = false;
+                dataGridView1.Columns.Clear();
+
+                // Thêm các cột theo thứ tự mong muốn
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "cSVidDataGridViewTextBoxColumn",
+                    DataPropertyName = "CSV_id",
+                    HeaderText = "ID",
+                    Width = 50,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "tenDataGridViewTextBoxColumn",
+                    DataPropertyName = "Ten",
+                    HeaderText = "Họ Tên",
+                    Width = 150,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "ngaySinhDataGridViewTextBoxColumn",
+                    DataPropertyName = "NgaySinh",
+                    HeaderText = "Ngày Sinh",
+                    Width = 100,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "mSSVDataGridViewTextBoxColumn",
+                    DataPropertyName = "MSSV",
+                    HeaderText = "MSSV",
+                    Width = 80,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "dCDataGridViewTextBoxColumn",
+                    DataPropertyName = "DC",
+                    HeaderText = "Địa Chỉ",
+                    Width = 120,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "emailDataGridViewTextBoxColumn",
+                    DataPropertyName = "email",
+                    HeaderText = "Email",
+                    Width = 150,
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "phoneDataGridViewTextBoxColumn",
+                    DataPropertyName = "phone",
+                    HeaderText = "Điện Thoại",
+                    Width = 100,
+                    ReadOnly = true
+                });
+
+                // Thêm cột mới: Khóa học
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "khoaHocDataGridViewTextBoxColumn",
+                    DataPropertyName = "ten_khoa_hoc",
+                    HeaderText = "Khóa Học",
+                    Width = 100,
+                    ReadOnly = true
+                });
+
+                // Thêm cột mới: Tên Ngành
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "tenNganhDataGridViewTextBoxColumn",
+                    DataPropertyName = "ten_nganh",
+                    HeaderText = "Tên Ngành",
+                    Width = 120,
+                    ReadOnly = true
+                });
+
+                // Thêm cột mới: Tên Khoa
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "tenKhoaDataGridViewTextBoxColumn",
+                    DataPropertyName = "ten_khoa",
+                    HeaderText = "Tên Khoa",
+                    Width = 120,
+                    ReadOnly = true
+                });
+
+                // Định dạng cột ngày sinh
+                if (dataGridView1.Columns["ngaySinhDataGridViewTextBoxColumn"] != null)
+                {
+                    dataGridView1.Columns["ngaySinhDataGridViewTextBoxColumn"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cấu hình DataGridView: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void LoadEventData()
         {
             try
             {
-                // Load data into the DataSet first
-                this.eventTableAdapter.Fill(this.quanLy_CSVDataSet.Event);
+                //// Load data into the DataSet first
+                //this.eventTableAdapter.Fill(this.quanLy_CSVDataSet.Event);
                 
-                // Set the binding source to use the updated DataSet
-                eventBindingSource.DataSource = this.quanLy_CSVDataSet;
-                eventBindingSource.DataMember = "Event";
+                //// Set the binding source to use the updated DataSet
+                //eventBindingSource.DataSource = this.quanLy_CSVDataSet;
+                //eventBindingSource.DataMember = "Event";
                 
-                // Make sure the DataGridView uses the binding source
-                dataGridView_events.DataSource = eventBindingSource;
+                //// Make sure the DataGridView uses the binding source
+                //dataGridView_events.DataSource = eventBindingSource;
                 
-                // Copy data for search functionality
-                using (SqlConnection connection = new SqlConnection(connectString))
-                {
-                    connection.Open();
-                    string query = @"SELECT event_id, event_name, event_date, so_luong_tham_gia, description
-                                    FROM Event 
-                                    ORDER BY event_date DESC";
+                //// Copy data for search functionality
+                //using (SqlConnection connection = new SqlConnection(connectString))
+                //{
+                //    connection.Open();
+                //    string query = @"SELECT event_id, event_name, event_date, so_luong_tham_gia, description
+                //                    FROM Event 
+                //                    ORDER BY event_date DESC";
                     
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-                    originalEventDataTable = dataTable.Copy();
-                }
-                
+                //    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                //    DataTable dataTable = new DataTable();
+                //    adapter.Fill(dataTable);
+                //    originalEventDataTable = dataTable.Copy();
+                //}
+                SqlConnection connection = new SqlConnection(connectString);
+                connection.Open();
+
+                string query = @"SELECT e.event_id, e.event_name, e.event_date, e.so_luong_tham_gia, 
+                                   e.description, k.ten_khoa, k.khoa_id
+                            FROM Event e
+                            LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
+                            ORDER BY e.event_date DESC";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                // Cập nhật DataGridView với dữ liệu mới
+                dataGridView_events.DataSource = dataTable;
+
+                // Lưu trữ dữ liệu gốc để tìm kiếm
+                originalEventDataTable = dataTable.Copy();
+
+                // Cấu hình lại các cột
+                ConfigureEventDataGridView();
+
                 txt_timkiem_event.Clear();
             }
             catch (Exception ex)
@@ -196,26 +434,91 @@ namespace qly_csv_app.UI.Admin
             }
         }
 
-        //private void ConfigureEventDataGridView()
-        //{
-        //    if (dataGridView_events.Columns.Count > 0)
-        //    {
-        //        dataGridView_events.Columns["event_id"].HeaderText = "ID";
-        //        dataGridView_events.Columns["event_id"].Width = 50;
-                
-        //        dataGridView_events.Columns["event_name"].HeaderText = "Tên Sự Kiện";
-        //        dataGridView_events.Columns["event_name"].Width = 200;
-                
-        //        dataGridView_events.Columns["event_date"].HeaderText = "Ngày Diễn Ra";
-        //        dataGridView_events.Columns["event_date"].Width = 120;
+        private void ConfigureEventDataGridView()
+{
+    try
+    {
+        // Thiết lập AutoGenerateColumns = false để tự quản lý columns
+        dataGridView_events.AutoGenerateColumns = false;
+        dataGridView_events.Columns.Clear();
 
-        //        dataGridView_events.Columns["so_luong_tham_gia"].HeaderText = "Số Lượng Tham Gia";
-        //        dataGridView_events.Columns["so_luong_tham_gia"].Width = 130;
+        // Thêm các cột theo thứ tự mong muốn
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "eventidDataGridViewTextBoxColumn",
+            DataPropertyName = "event_id",
+            HeaderText = "ID",
+            Width = 50,
+            ReadOnly = true
+        });
 
-        //        dataGridView_events.Columns["description"].HeaderText = "Mô Tả";
-        //        dataGridView_events.Columns["description"].Width = 218;
-        //    }
-        //}
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "eventnameDataGridViewTextBoxColumn",
+            DataPropertyName = "event_name",
+            HeaderText = "Tên Sự Kiện",
+            Width = 200,
+            ReadOnly = true
+        });
+
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "eventdateDataGridViewTextBoxColumn",
+            DataPropertyName = "event_date",
+            HeaderText = "Ngày tổ chức",
+            Width = 120,
+            ReadOnly = true
+        });
+
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "soluongthamgiaDataGridViewTextBoxColumn",
+            DataPropertyName = "so_luong_tham_gia",
+            HeaderText = "Số lượng tham gia",
+            Width = 130,
+            ReadOnly = true
+        });
+
+        // Thêm cột mới: Khoa tổ chức
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "tenKhoaDataGridViewTextBoxColumn",
+            DataPropertyName = "ten_khoa",
+            HeaderText = "Khoa tổ chức",
+            Width = 150,
+            ReadOnly = true
+        });
+
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "descriptionDataGridViewTextBoxColumn",
+            DataPropertyName = "description",
+            HeaderText = "Mô tả",
+            Width = 250,
+            ReadOnly = true
+        });
+
+        // Hidden column for khoa_id
+        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            Name = "khoaIdDataGridViewTextBoxColumn",
+            DataPropertyName = "khoa_id",
+            HeaderText = "Khoa ID",
+            Visible = false
+        });
+
+        // Định dạng cột ngày
+        if (dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"] != null)
+        {
+            dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"].DefaultCellStyle.Format = "dd/MM/yyyy";
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show("Lỗi khi cấu hình DataGridView Events: " + ex.Message, "Lỗi", 
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+}
 
         private void btn_timkiem_Click(object sender, EventArgs e)
         {
@@ -227,14 +530,77 @@ namespace qly_csv_app.UI.Admin
             TimKiemEvent();
         }
 
+        private void TimKiemCuuSV()
+        {
+            string tuKhoa = txt_timkiem.Text.Trim();
+            
+            if (string.IsNullOrEmpty(tuKhoa))
+            {
+                // Nếu không có từ khóa, tải lại tất cả dữ liệu
+                LoadCuuSVData();
+                return;
+            }
+
+            try
+            {
+                DataView dv = new DataView(originalDataTable);
+                
+                // Tìm kiếm theo ID, tên, MSSV, tên khoa, tên ngành
+                if (int.TryParse(tuKhoa, out int csvId))
+                {
+                    // Nếu từ khóa là số, tìm theo ID hoặc các trường text
+                    string filter = $"CSV_id = {csvId}";
+                    
+                    // Thêm điều kiện tìm kiếm text an toàn
+                    if (!string.IsNullOrEmpty(tuKhoa))
+                    {
+                        filter += $" OR Ten LIKE '%{tuKhoa.Replace("'", "''")}%' OR MSSV LIKE '%{tuKhoa.Replace("'", "''")}%'";
+
+                        // Kiểm tra null trước khi tìm kiếm
+                        filter += $" OR (ten_khoa IS NOT NULL AND ten_khoa LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                        filter += $" OR (ten_nganh IS NOT NULL AND ten_nganh LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                        filter += $" OR (ten_khoa_hoc IS NOT NULL AND ten_khoa_hoc LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    }
+                    
+                    dv.RowFilter = filter;
+                }
+                else
+                {
+                    // Nếu từ khóa là văn bản, tìm theo các trường text
+                    string filter = $"Ten LIKE '%{tuKhoa.Replace("'", "''")}%' OR MSSV LIKE '%{tuKhoa.Replace("'", "''")}%'";
+
+                    // Kiểm tra null trước khi tìm kiếm
+                    filter += $" OR (ten_khoa IS NOT NULL AND ten_khoa LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    filter += $" OR (ten_nganh IS NOT NULL AND ten_nganh LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    filter += $" OR (ten_khoa_hoc IS NOT NULL AND ten_khoa_hoc LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    
+                    dv.RowFilter = filter;
+                }
+
+                dataGridView1.DataSource = dv.ToTable();
+                
+                if (dv.Count == 0)
+                {
+                    MessageBox.Show($"Không tìm thấy cựu sinh viên nào với từ khóa: '{tuKhoa}'", 
+                        "Kết quả tìm kiếm", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Fallback: load lại dữ liệu gốc nếu có lỗi
+                LoadCuuSVData();
+            }
+        }
+
         private void TimKiemEvent()
         {
             string tuKhoa = txt_timkiem_event.Text.Trim();
             
             if (string.IsNullOrEmpty(tuKhoa))
             {
-                // Nếu không có từ khóa, hiển thị tất cả dữ liệu từ binding source
-                LoadEventData(); // Reload to show all data
+                // Nếu không có từ khóa, tải lại tất cả dữ liệu
+                LoadEventData();
                 return;
             }
 
@@ -242,25 +608,32 @@ namespace qly_csv_app.UI.Admin
             {
                 DataView dv = new DataView(originalEventDataTable);
                 
-                // Tìm kiếm theo ID hoặc tên sự kiện
+                // Tìm kiếm theo ID, tên sự kiện, mô tả hoặc tên khoa
                 if (int.TryParse(tuKhoa, out int eventId))
                 {
-                    // Nếu từ khóa là số, tìm theo ID
-                    dv.RowFilter = $"event_id = {eventId} OR event_name LIKE '%{tuKhoa}%'";
-
-                    // Nếu từ khóa là số âm, tìm theo ID và mô tả
-                    if (eventId < 0)
+                    // Nếu từ khóa là số, tìm theo ID hoặc các trường text
+                    string filter = $"event_id = {eventId}";
+                    
+                    if (!string.IsNullOrEmpty(tuKhoa))
                     {
-                        dv.RowFilter = $"event_id = {eventId} OR description LIKE '%{Math.Abs(eventId)}%'";
+                        filter += $" OR event_name LIKE '%{tuKhoa.Replace("'", "''")}%'";
+                        filter += $" OR (description IS NOT NULL AND description LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                        filter += $" OR (ten_khoa IS NOT NULL AND ten_khoa LIKE '%{tuKhoa.Replace("'", "''")}%')";
                     }
+                    
+                    dv.RowFilter = filter;
                 }
                 else
                 {
-                    // Nếu từ khóa là văn bản, tìm theo tên
-                    dv.RowFilter = $"event_name LIKE '%{tuKhoa}%' OR description LIKE '%{tuKhoa}%'";
+                    // Nếu từ khóa là văn bản, tìm theo tên sự kiện, mô tả hoặc tên khoa
+                    string filter = $"event_name LIKE '%{tuKhoa.Replace("'", "''")}%'";
+                    filter += $" OR (description IS NOT NULL AND description LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    filter += $" OR (ten_khoa IS NOT NULL AND ten_khoa LIKE '%{tuKhoa.Replace("'", "''")}%')";
+                    
+                    dv.RowFilter = filter;
                 }
 
-                // For search results, temporarily use DataTable instead of binding source
+                // Cập nhật DataGridView với kết quả tìm kiếm
                 dataGridView_events.DataSource = dv.ToTable();
                 
                 if (dv.Count == 0)
@@ -272,6 +645,8 @@ namespace qly_csv_app.UI.Admin
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Fallback: load lại dữ liệu gốc nếu có lỗi
+                LoadEventData();
             }
         }
 
@@ -290,47 +665,6 @@ namespace qly_csv_app.UI.Admin
             {
                 TimKiemEvent();
                 e.Handled = true;
-            }
-        }
-
-        private void TimKiemCuuSV()
-        {
-            string tuKhoa = txt_timkiem.Text.Trim();
-            
-            if (string.IsNullOrEmpty(tuKhoa))
-            {
-                // Nếu không có từ khóa, hiển thị tất cả dữ liệu
-                cuuSVBindingSource.DataSource = originalDataTable;
-                return;
-            }
-
-            try
-            {
-                DataView dv = new DataView(originalDataTable);
-                
-                // Tìm kiếm theo ID hoặc tên
-                if (int.TryParse(tuKhoa, out int csvId))
-                {
-                    // Nếu từ khóa là số, tìm theo ID
-                    dv.RowFilter = $"CSV_id = {csvId} OR Ten LIKE '%{tuKhoa}%'";
-                }
-                else
-                {
-                    // Nếu từ khóa là văn bản, tìm theo tên
-                    dv.RowFilter = $"Ten LIKE '%{tuKhoa}%'";
-                }
-
-                cuuSVBindingSource.DataSource = dv.ToTable();
-                
-                if (dv.Count == 0)
-                {
-                    MessageBox.Show($"Không tìm thấy cựu sinh viên nào với từ khóa: '{tuKhoa}'", 
-                        "Kết quả tìm kiếm", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -473,6 +807,12 @@ namespace qly_csv_app.UI.Admin
                     {
                         try
                         {
+                            // Xóa tất cả đóng góp liên quan đến sự kiện trước
+                            string deleteContributionQuery = "DELETE FROM Contribution WHERE event_id = @event_id";
+                            SqlCommand deleteContributionCmd = new SqlCommand(deleteContributionQuery, connection, transaction);
+                            deleteContributionCmd.Parameters.AddWithValue("@event_id", eventId);
+                            deleteContributionCmd.ExecuteNonQuery();
+
                             // Xóa tất cả participation trước
                             string deleteParticipationQuery = "DELETE FROM Participation WHERE event_id = @event_id";
                             SqlCommand deleteParticipationCmd = new SqlCommand(deleteParticipationQuery, connection, transaction);
@@ -522,6 +862,47 @@ namespace qly_csv_app.UI.Admin
                 MessageBox.Show("Vui lòng chọn một sự kiện để cập nhật!", "Thông báo", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            DataGridViewRow selectedRow = dataGridView_events.SelectedRows[0];
+
+            try
+            {
+                // Check if the required columns exist and have values
+                if (dataGridView_events.Columns.Contains("eventidDataGridViewTextBoxColumn") &&
+                    selectedRow.Cells["eventidDataGridViewTextBoxColumn"].Value != null &&
+                    dataGridView_events.Columns.Contains("eventnameDataGridViewTextBoxColumn") &&
+                    dataGridView_events.Columns.Contains("eventdateDataGridViewTextBoxColumn") &&
+                    selectedRow.Cells["eventdateDataGridViewTextBoxColumn"].Value != null)
+                {
+                    // Get event information using designer column names
+                    int eventId = Convert.ToInt32(selectedRow.Cells["eventidDataGridViewTextBoxColumn"].Value);
+                    string eventName = selectedRow.Cells["eventnameDataGridViewTextBoxColumn"]?.Value?.ToString() ?? "";
+                    DateTime eventDate = Convert.ToDateTime(selectedRow.Cells["eventdateDataGridViewTextBoxColumn"].Value);
+                    string description = selectedRow.Cells["descriptionDataGridViewTextBoxColumn"]?.Value?.ToString() ?? "";
+                    int participants = Convert.ToInt32(selectedRow.Cells["soluongthamgiaDataGridViewTextBoxColumn"]?.Value ?? 0);
+
+                    // Open update form
+                    update_event updateForm = new update_event(eventId, eventName, eventDate, description, participants);
+
+                    if (updateForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Reload data if event was updated successfully
+                        LoadEventData();
+                        MessageBox.Show("Sự kiện đã được cập nhật thành công!", "Thành công",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không thể xác định thông tin sự kiện từ dòng được chọn!",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi mở form cập nhật sự kiện: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -666,5 +1047,6 @@ namespace qly_csv_app.UI.Admin
             change_password_view changePassForm = new change_password_view(currentAdminUserId);
             changePassForm.Show();
         }
+
     }
 }

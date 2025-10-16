@@ -35,27 +35,10 @@
             this.btn_danhsachsukien = new System.Windows.Forms.Button();
             this.btn_danhsachcuusinhvien = new System.Windows.Forms.Button();
             this.panel_content = new System.Windows.Forms.Panel();
-            this.panel_sukien = new System.Windows.Forms.Panel();
-            this.dataGridView_events = new System.Windows.Forms.DataGridView();
-            this.eventidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eventnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eventdateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.soluongthamgiaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eventBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
-            this.txt_timkiem_event = new System.Windows.Forms.TextBox();
-            this.btn_timkiem_event = new System.Windows.Forms.Button();
-            this.btn_them_event = new System.Windows.Forms.Button();
-            this.btn_xoa_event = new System.Windows.Forms.Button();
-            this.btn_capnhat_event = new System.Windows.Forms.Button();
-            this.label_event_title = new System.Windows.Forms.Label();
-            this.label_timkiem_event = new System.Windows.Forms.Label();
-            this.panel_themadmin = new System.Windows.Forms.Panel();
-            this.dataGridView_admins = new System.Windows.Forms.DataGridView();
-            this.btn_them_admin_new = new System.Windows.Forms.Button();
-            this.label_admin_title = new System.Windows.Forms.Label();
             this.panel_cuusinhvien = new System.Windows.Forms.Panel();
+            this.comboBox_fillkhoa = new System.Windows.Forms.ComboBox();
+            this.khoaBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
             this.label2 = new System.Windows.Forms.Label();
             this.btn_moithamgiasukien = new System.Windows.Forms.Button();
             this.btn_xoacuusinhvien = new System.Windows.Forms.Button();
@@ -72,19 +55,42 @@
             this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phoneDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cuuSVBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.panel_sukien = new System.Windows.Forms.Panel();
+            this.dataGridView_events = new System.Windows.Forms.DataGridView();
+            this.eventidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eventnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eventdateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.soluongthamgiaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eventBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.txt_timkiem_event = new System.Windows.Forms.TextBox();
+            this.btn_timkiem_event = new System.Windows.Forms.Button();
+            this.btn_them_event = new System.Windows.Forms.Button();
+            this.btn_xoa_event = new System.Windows.Forms.Button();
+            this.btn_capnhat_event = new System.Windows.Forms.Button();
+            this.label_event_title = new System.Windows.Forms.Label();
+            this.label_timkiem_event = new System.Windows.Forms.Label();
+            this.panel_themadmin = new System.Windows.Forms.Panel();
+            this.dataGridView_admins = new System.Windows.Forms.DataGridView();
+            this.btn_them_admin_new = new System.Windows.Forms.Button();
+            this.label_admin_title = new System.Windows.Forms.Label();
             this.cuuSVTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.CuuSVTableAdapter();
             this.eventTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.EventTableAdapter();
+            this.khoaBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.khoaTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.KhoaTableAdapter();
             this.panel_buttons.SuspendLayout();
             this.panel_content.SuspendLayout();
+            this.panel_cuusinhvien.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).BeginInit();
             this.panel_sukien.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_events)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).BeginInit();
             this.panel_themadmin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_admins)).BeginInit();
-            this.panel_cuusinhvien.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_buttons
@@ -155,228 +161,18 @@
             // 
             // panel_content
             // 
+            this.panel_content.Controls.Add(this.panel_cuusinhvien);
             this.panel_content.Controls.Add(this.panel_sukien);
             this.panel_content.Controls.Add(this.panel_themadmin);
-            this.panel_content.Controls.Add(this.panel_cuusinhvien);
             this.panel_content.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_content.Location = new System.Drawing.Point(200, 0);
             this.panel_content.Name = "panel_content";
             this.panel_content.Size = new System.Drawing.Size(1066, 454);
             this.panel_content.TabIndex = 1;
             // 
-            // panel_sukien
-            // 
-            this.panel_sukien.Controls.Add(this.dataGridView_events);
-            this.panel_sukien.Controls.Add(this.txt_timkiem_event);
-            this.panel_sukien.Controls.Add(this.btn_timkiem_event);
-            this.panel_sukien.Controls.Add(this.btn_them_event);
-            this.panel_sukien.Controls.Add(this.btn_xoa_event);
-            this.panel_sukien.Controls.Add(this.btn_capnhat_event);
-            this.panel_sukien.Controls.Add(this.label_event_title);
-            this.panel_sukien.Controls.Add(this.label_timkiem_event);
-            this.panel_sukien.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_sukien.Location = new System.Drawing.Point(0, 0);
-            this.panel_sukien.Name = "panel_sukien";
-            this.panel_sukien.Size = new System.Drawing.Size(1066, 454);
-            this.panel_sukien.TabIndex = 1;
-            this.panel_sukien.Visible = false;
-            // 
-            // dataGridView_events
-            // 
-            this.dataGridView_events.AllowUserToAddRows = false;
-            this.dataGridView_events.AllowUserToDeleteRows = false;
-            this.dataGridView_events.AutoGenerateColumns = false;
-            this.dataGridView_events.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView_events.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView_events.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_events.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.eventidDataGridViewTextBoxColumn,
-            this.eventnameDataGridViewTextBoxColumn,
-            this.eventdateDataGridViewTextBoxColumn,
-            this.soluongthamgiaDataGridViewTextBoxColumn,
-            this.descriptionDataGridViewTextBoxColumn});
-            this.dataGridView_events.DataSource = this.eventBindingSource;
-            this.dataGridView_events.Location = new System.Drawing.Point(24, 100);
-            this.dataGridView_events.Name = "dataGridView_events";
-            this.dataGridView_events.ReadOnly = true;
-            this.dataGridView_events.RowHeadersWidth = 51;
-            this.dataGridView_events.RowTemplate.Height = 24;
-            this.dataGridView_events.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_events.Size = new System.Drawing.Size(1030, 280);
-            this.dataGridView_events.TabIndex = 0;
-            // 
-            // eventidDataGridViewTextBoxColumn
-            // 
-            this.eventidDataGridViewTextBoxColumn.DataPropertyName = "event_id";
-            this.eventidDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.eventidDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.eventidDataGridViewTextBoxColumn.Name = "eventidDataGridViewTextBoxColumn";
-            this.eventidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.eventidDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // eventnameDataGridViewTextBoxColumn
-            // 
-            this.eventnameDataGridViewTextBoxColumn.DataPropertyName = "event_name";
-            this.eventnameDataGridViewTextBoxColumn.HeaderText = "Tên sự kiện";
-            this.eventnameDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.eventnameDataGridViewTextBoxColumn.Name = "eventnameDataGridViewTextBoxColumn";
-            this.eventnameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.eventnameDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // eventdateDataGridViewTextBoxColumn
-            // 
-            this.eventdateDataGridViewTextBoxColumn.DataPropertyName = "event_date";
-            this.eventdateDataGridViewTextBoxColumn.HeaderText = "Ngày tổ chức";
-            this.eventdateDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.eventdateDataGridViewTextBoxColumn.Name = "eventdateDataGridViewTextBoxColumn";
-            this.eventdateDataGridViewTextBoxColumn.ReadOnly = true;
-            this.eventdateDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // soluongthamgiaDataGridViewTextBoxColumn
-            // 
-            this.soluongthamgiaDataGridViewTextBoxColumn.DataPropertyName = "so_luong_tham_gia";
-            this.soluongthamgiaDataGridViewTextBoxColumn.HeaderText = "Số lượng tham gia";
-            this.soluongthamgiaDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.soluongthamgiaDataGridViewTextBoxColumn.Name = "soluongthamgiaDataGridViewTextBoxColumn";
-            this.soluongthamgiaDataGridViewTextBoxColumn.ReadOnly = true;
-            this.soluongthamgiaDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Mô tả";
-            this.descriptionDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.descriptionDataGridViewTextBoxColumn.Width = 450;
-            // 
-            // eventBindingSource
-            // 
-            this.eventBindingSource.DataMember = "Event";
-            this.eventBindingSource.DataSource = this.quanLy_CSVDataSet;
-            // 
-            // quanLy_CSVDataSet
-            // 
-            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
-            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // txt_timkiem_event
-            // 
-            this.txt_timkiem_event.Location = new System.Drawing.Point(85, 23);
-            this.txt_timkiem_event.Name = "txt_timkiem_event";
-            this.txt_timkiem_event.Size = new System.Drawing.Size(200, 22);
-            this.txt_timkiem_event.TabIndex = 1;
-            // 
-            // btn_timkiem_event
-            // 
-            this.btn_timkiem_event.Location = new System.Drawing.Point(300, 18);
-            this.btn_timkiem_event.Name = "btn_timkiem_event";
-            this.btn_timkiem_event.Size = new System.Drawing.Size(80, 32);
-            this.btn_timkiem_event.TabIndex = 2;
-            this.btn_timkiem_event.Text = "Tìm kiếm";
-            this.btn_timkiem_event.UseVisualStyleBackColor = true;
-            // 
-            // btn_them_event
-            // 
-            this.btn_them_event.BackColor = System.Drawing.Color.LightGreen;
-            this.btn_them_event.Location = new System.Drawing.Point(24, 390);
-            this.btn_them_event.Name = "btn_them_event";
-            this.btn_them_event.Size = new System.Drawing.Size(120, 35);
-            this.btn_them_event.TabIndex = 3;
-            this.btn_them_event.Text = "Thêm sự kiện";
-            this.btn_them_event.UseVisualStyleBackColor = false;
-            // 
-            // btn_xoa_event
-            // 
-            this.btn_xoa_event.BackColor = System.Drawing.Color.LightCoral;
-            this.btn_xoa_event.Location = new System.Drawing.Point(160, 390);
-            this.btn_xoa_event.Name = "btn_xoa_event";
-            this.btn_xoa_event.Size = new System.Drawing.Size(120, 35);
-            this.btn_xoa_event.TabIndex = 4;
-            this.btn_xoa_event.Text = "Xóa sự kiện";
-            this.btn_xoa_event.UseVisualStyleBackColor = false;
-            // 
-            // btn_capnhat_event
-            // 
-            this.btn_capnhat_event.BackColor = System.Drawing.Color.LightBlue;
-            this.btn_capnhat_event.Location = new System.Drawing.Point(300, 390);
-            this.btn_capnhat_event.Name = "btn_capnhat_event";
-            this.btn_capnhat_event.Size = new System.Drawing.Size(120, 35);
-            this.btn_capnhat_event.TabIndex = 5;
-            this.btn_capnhat_event.Text = "Cập nhật";
-            this.btn_capnhat_event.UseVisualStyleBackColor = false;
-            this.btn_capnhat_event.Click += new System.EventHandler(this.btn_capnhat_event_Click_1);
-            // 
-            // label_event_title
-            // 
-            this.label_event_title.AutoSize = true;
-            this.label_event_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_event_title.Location = new System.Drawing.Point(12, 70);
-            this.label_event_title.Name = "label_event_title";
-            this.label_event_title.Size = new System.Drawing.Size(190, 25);
-            this.label_event_title.TabIndex = 6;
-            this.label_event_title.Text = "Danh sách sự kiện";
-            // 
-            // label_timkiem_event
-            // 
-            this.label_timkiem_event.AutoSize = true;
-            this.label_timkiem_event.Location = new System.Drawing.Point(12, 26);
-            this.label_timkiem_event.Name = "label_timkiem_event";
-            this.label_timkiem_event.Size = new System.Drawing.Size(65, 16);
-            this.label_timkiem_event.TabIndex = 7;
-            this.label_timkiem_event.Text = "Tìm kiếm:";
-            // 
-            // panel_themadmin
-            // 
-            this.panel_themadmin.Controls.Add(this.dataGridView_admins);
-            this.panel_themadmin.Controls.Add(this.btn_them_admin_new);
-            this.panel_themadmin.Controls.Add(this.label_admin_title);
-            this.panel_themadmin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_themadmin.Location = new System.Drawing.Point(0, 0);
-            this.panel_themadmin.Name = "panel_themadmin";
-            this.panel_themadmin.Size = new System.Drawing.Size(1066, 454);
-            this.panel_themadmin.TabIndex = 2;
-            this.panel_themadmin.Visible = false;
-            // 
-            // dataGridView_admins
-            // 
-            this.dataGridView_admins.AllowUserToAddRows = false;
-            this.dataGridView_admins.AllowUserToDeleteRows = false;
-            this.dataGridView_admins.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView_admins.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView_admins.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_admins.Location = new System.Drawing.Point(24, 110);
-            this.dataGridView_admins.Name = "dataGridView_admins";
-            this.dataGridView_admins.ReadOnly = true;
-            this.dataGridView_admins.RowHeadersWidth = 51;
-            this.dataGridView_admins.RowTemplate.Height = 24;
-            this.dataGridView_admins.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_admins.Size = new System.Drawing.Size(773, 280);
-            this.dataGridView_admins.TabIndex = 2;
-            // 
-            // btn_them_admin_new
-            // 
-            this.btn_them_admin_new.BackColor = System.Drawing.Color.LightGreen;
-            this.btn_them_admin_new.Location = new System.Drawing.Point(24, 60);
-            this.btn_them_admin_new.Name = "btn_them_admin_new";
-            this.btn_them_admin_new.Size = new System.Drawing.Size(140, 35);
-            this.btn_them_admin_new.TabIndex = 1;
-            this.btn_them_admin_new.Text = "Thêm Admin mới";
-            this.btn_them_admin_new.UseVisualStyleBackColor = false;
-            this.btn_them_admin_new.Click += new System.EventHandler(this.btn_them_admin_new_Click);
-            // 
-            // label_admin_title
-            // 
-            this.label_admin_title.AutoSize = true;
-            this.label_admin_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_admin_title.Location = new System.Drawing.Point(12, 20);
-            this.label_admin_title.Name = "label_admin_title";
-            this.label_admin_title.Size = new System.Drawing.Size(248, 25);
-            this.label_admin_title.TabIndex = 0;
-            this.label_admin_title.Text = "Quản lý tài khoản Admin";
-            // 
             // panel_cuusinhvien
             // 
+            this.panel_cuusinhvien.Controls.Add(this.comboBox_fillkhoa);
             this.panel_cuusinhvien.Controls.Add(this.label2);
             this.panel_cuusinhvien.Controls.Add(this.btn_moithamgiasukien);
             this.panel_cuusinhvien.Controls.Add(this.btn_xoacuusinhvien);
@@ -391,6 +187,29 @@
             this.panel_cuusinhvien.Size = new System.Drawing.Size(1066, 454);
             this.panel_cuusinhvien.TabIndex = 0;
             this.panel_cuusinhvien.Visible = false;
+            // 
+            // comboBox_fillkhoa
+            // 
+            this.comboBox_fillkhoa.DataSource = this.khoaBindingSource1;
+            this.comboBox_fillkhoa.DisplayMember = "ten_khoa";
+            this.comboBox_fillkhoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox_fillkhoa.FormattingEnabled = true;
+            this.comboBox_fillkhoa.Location = new System.Drawing.Point(419, 19);
+            this.comboBox_fillkhoa.Name = "comboBox_fillkhoa";
+            this.comboBox_fillkhoa.Size = new System.Drawing.Size(203, 31);
+            this.comboBox_fillkhoa.TabIndex = 8;
+            this.comboBox_fillkhoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_fillkhoa.SelectedIndexChanged += new System.EventHandler(this.comboBox_fillkhoa_SelectedIndexChanged);
+            // 
+            // khoaBindingSource1
+            // 
+            this.khoaBindingSource1.DataMember = "Khoa";
+            this.khoaBindingSource1.DataSource = this.quanLy_CSVDataSet;
+            // 
+            // quanLy_CSVDataSet
+            // 
+            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
+            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // label2
             // 
@@ -552,6 +371,212 @@
             this.cuuSVBindingSource.DataMember = "CuuSV";
             this.cuuSVBindingSource.DataSource = this.quanLy_CSVDataSet;
             // 
+            // panel_sukien
+            // 
+            this.panel_sukien.Controls.Add(this.dataGridView_events);
+            this.panel_sukien.Controls.Add(this.txt_timkiem_event);
+            this.panel_sukien.Controls.Add(this.btn_timkiem_event);
+            this.panel_sukien.Controls.Add(this.btn_them_event);
+            this.panel_sukien.Controls.Add(this.btn_xoa_event);
+            this.panel_sukien.Controls.Add(this.btn_capnhat_event);
+            this.panel_sukien.Controls.Add(this.label_event_title);
+            this.panel_sukien.Controls.Add(this.label_timkiem_event);
+            this.panel_sukien.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_sukien.Location = new System.Drawing.Point(0, 0);
+            this.panel_sukien.Name = "panel_sukien";
+            this.panel_sukien.Size = new System.Drawing.Size(1066, 454);
+            this.panel_sukien.TabIndex = 1;
+            this.panel_sukien.Visible = false;
+            // 
+            // dataGridView_events
+            // 
+            this.dataGridView_events.AllowUserToAddRows = false;
+            this.dataGridView_events.AllowUserToDeleteRows = false;
+            this.dataGridView_events.AutoGenerateColumns = false;
+            this.dataGridView_events.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView_events.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView_events.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_events.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.eventidDataGridViewTextBoxColumn,
+            this.eventnameDataGridViewTextBoxColumn,
+            this.eventdateDataGridViewTextBoxColumn,
+            this.soluongthamgiaDataGridViewTextBoxColumn,
+            this.descriptionDataGridViewTextBoxColumn});
+            this.dataGridView_events.DataSource = this.eventBindingSource;
+            this.dataGridView_events.Location = new System.Drawing.Point(24, 100);
+            this.dataGridView_events.Name = "dataGridView_events";
+            this.dataGridView_events.ReadOnly = true;
+            this.dataGridView_events.RowHeadersWidth = 51;
+            this.dataGridView_events.RowTemplate.Height = 24;
+            this.dataGridView_events.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_events.Size = new System.Drawing.Size(1030, 280);
+            this.dataGridView_events.TabIndex = 0;
+            // 
+            // eventidDataGridViewTextBoxColumn
+            // 
+            this.eventidDataGridViewTextBoxColumn.DataPropertyName = "event_id";
+            this.eventidDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.eventidDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.eventidDataGridViewTextBoxColumn.Name = "eventidDataGridViewTextBoxColumn";
+            this.eventidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.eventidDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // eventnameDataGridViewTextBoxColumn
+            // 
+            this.eventnameDataGridViewTextBoxColumn.DataPropertyName = "event_name";
+            this.eventnameDataGridViewTextBoxColumn.HeaderText = "Tên sự kiện";
+            this.eventnameDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.eventnameDataGridViewTextBoxColumn.Name = "eventnameDataGridViewTextBoxColumn";
+            this.eventnameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.eventnameDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // eventdateDataGridViewTextBoxColumn
+            // 
+            this.eventdateDataGridViewTextBoxColumn.DataPropertyName = "event_date";
+            this.eventdateDataGridViewTextBoxColumn.HeaderText = "Ngày tổ chức";
+            this.eventdateDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.eventdateDataGridViewTextBoxColumn.Name = "eventdateDataGridViewTextBoxColumn";
+            this.eventdateDataGridViewTextBoxColumn.ReadOnly = true;
+            this.eventdateDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // soluongthamgiaDataGridViewTextBoxColumn
+            // 
+            this.soluongthamgiaDataGridViewTextBoxColumn.DataPropertyName = "so_luong_tham_gia";
+            this.soluongthamgiaDataGridViewTextBoxColumn.HeaderText = "Số lượng tham gia";
+            this.soluongthamgiaDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.soluongthamgiaDataGridViewTextBoxColumn.Name = "soluongthamgiaDataGridViewTextBoxColumn";
+            this.soluongthamgiaDataGridViewTextBoxColumn.ReadOnly = true;
+            this.soluongthamgiaDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Mô tả";
+            this.descriptionDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.descriptionDataGridViewTextBoxColumn.Width = 450;
+            // 
+            // eventBindingSource
+            // 
+            this.eventBindingSource.DataMember = "Event";
+            this.eventBindingSource.DataSource = this.quanLy_CSVDataSet;
+            // 
+            // txt_timkiem_event
+            // 
+            this.txt_timkiem_event.Location = new System.Drawing.Point(85, 23);
+            this.txt_timkiem_event.Name = "txt_timkiem_event";
+            this.txt_timkiem_event.Size = new System.Drawing.Size(200, 22);
+            this.txt_timkiem_event.TabIndex = 1;
+            // 
+            // btn_timkiem_event
+            // 
+            this.btn_timkiem_event.Location = new System.Drawing.Point(300, 18);
+            this.btn_timkiem_event.Name = "btn_timkiem_event";
+            this.btn_timkiem_event.Size = new System.Drawing.Size(80, 32);
+            this.btn_timkiem_event.TabIndex = 2;
+            this.btn_timkiem_event.Text = "Tìm kiếm";
+            this.btn_timkiem_event.UseVisualStyleBackColor = true;
+            // 
+            // btn_them_event
+            // 
+            this.btn_them_event.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_them_event.Location = new System.Drawing.Point(24, 390);
+            this.btn_them_event.Name = "btn_them_event";
+            this.btn_them_event.Size = new System.Drawing.Size(120, 35);
+            this.btn_them_event.TabIndex = 3;
+            this.btn_them_event.Text = "Thêm sự kiện";
+            this.btn_them_event.UseVisualStyleBackColor = false;
+            // 
+            // btn_xoa_event
+            // 
+            this.btn_xoa_event.BackColor = System.Drawing.Color.LightCoral;
+            this.btn_xoa_event.Location = new System.Drawing.Point(160, 390);
+            this.btn_xoa_event.Name = "btn_xoa_event";
+            this.btn_xoa_event.Size = new System.Drawing.Size(120, 35);
+            this.btn_xoa_event.TabIndex = 4;
+            this.btn_xoa_event.Text = "Xóa sự kiện";
+            this.btn_xoa_event.UseVisualStyleBackColor = false;
+            // 
+            // btn_capnhat_event
+            // 
+            this.btn_capnhat_event.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_capnhat_event.Location = new System.Drawing.Point(300, 390);
+            this.btn_capnhat_event.Name = "btn_capnhat_event";
+            this.btn_capnhat_event.Size = new System.Drawing.Size(120, 35);
+            this.btn_capnhat_event.TabIndex = 5;
+            this.btn_capnhat_event.Text = "Cập nhật";
+            this.btn_capnhat_event.UseVisualStyleBackColor = false;
+            this.btn_capnhat_event.Click += new System.EventHandler(this.btn_capnhat_event_Click_1);
+            // 
+            // label_event_title
+            // 
+            this.label_event_title.AutoSize = true;
+            this.label_event_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_event_title.Location = new System.Drawing.Point(12, 70);
+            this.label_event_title.Name = "label_event_title";
+            this.label_event_title.Size = new System.Drawing.Size(190, 25);
+            this.label_event_title.TabIndex = 6;
+            this.label_event_title.Text = "Danh sách sự kiện";
+            // 
+            // label_timkiem_event
+            // 
+            this.label_timkiem_event.AutoSize = true;
+            this.label_timkiem_event.Location = new System.Drawing.Point(12, 26);
+            this.label_timkiem_event.Name = "label_timkiem_event";
+            this.label_timkiem_event.Size = new System.Drawing.Size(65, 16);
+            this.label_timkiem_event.TabIndex = 7;
+            this.label_timkiem_event.Text = "Tìm kiếm:";
+            // 
+            // panel_themadmin
+            // 
+            this.panel_themadmin.Controls.Add(this.dataGridView_admins);
+            this.panel_themadmin.Controls.Add(this.btn_them_admin_new);
+            this.panel_themadmin.Controls.Add(this.label_admin_title);
+            this.panel_themadmin.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_themadmin.Location = new System.Drawing.Point(0, 0);
+            this.panel_themadmin.Name = "panel_themadmin";
+            this.panel_themadmin.Size = new System.Drawing.Size(1066, 454);
+            this.panel_themadmin.TabIndex = 2;
+            this.panel_themadmin.Visible = false;
+            // 
+            // dataGridView_admins
+            // 
+            this.dataGridView_admins.AllowUserToAddRows = false;
+            this.dataGridView_admins.AllowUserToDeleteRows = false;
+            this.dataGridView_admins.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView_admins.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView_admins.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_admins.Location = new System.Drawing.Point(24, 110);
+            this.dataGridView_admins.Name = "dataGridView_admins";
+            this.dataGridView_admins.ReadOnly = true;
+            this.dataGridView_admins.RowHeadersWidth = 51;
+            this.dataGridView_admins.RowTemplate.Height = 24;
+            this.dataGridView_admins.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_admins.Size = new System.Drawing.Size(773, 280);
+            this.dataGridView_admins.TabIndex = 2;
+            // 
+            // btn_them_admin_new
+            // 
+            this.btn_them_admin_new.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_them_admin_new.Location = new System.Drawing.Point(24, 60);
+            this.btn_them_admin_new.Name = "btn_them_admin_new";
+            this.btn_them_admin_new.Size = new System.Drawing.Size(140, 35);
+            this.btn_them_admin_new.TabIndex = 1;
+            this.btn_them_admin_new.Text = "Thêm Admin mới";
+            this.btn_them_admin_new.UseVisualStyleBackColor = false;
+            this.btn_them_admin_new.Click += new System.EventHandler(this.btn_them_admin_new_Click);
+            // 
+            // label_admin_title
+            // 
+            this.label_admin_title.AutoSize = true;
+            this.label_admin_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_admin_title.Location = new System.Drawing.Point(12, 20);
+            this.label_admin_title.Name = "label_admin_title";
+            this.label_admin_title.Size = new System.Drawing.Size(248, 25);
+            this.label_admin_title.TabIndex = 0;
+            this.label_admin_title.Text = "Quản lý tài khoản Admin";
+            // 
             // cuuSVTableAdapter
             // 
             this.cuuSVTableAdapter.ClearBeforeFill = true;
@@ -559,6 +584,15 @@
             // eventTableAdapter
             // 
             this.eventTableAdapter.ClearBeforeFill = true;
+            // 
+            // khoaBindingSource
+            // 
+            this.khoaBindingSource.DataMember = "Khoa";
+            this.khoaBindingSource.DataSource = this.quanLy_CSVDataSet;
+            // 
+            // khoaTableAdapter
+            // 
+            this.khoaTableAdapter.ClearBeforeFill = true;
             // 
             // admin_view
             // 
@@ -573,18 +607,20 @@
             this.Load += new System.EventHandler(this.admin_view_Load);
             this.panel_buttons.ResumeLayout(false);
             this.panel_content.ResumeLayout(false);
+            this.panel_cuusinhvien.ResumeLayout(false);
+            this.panel_cuusinhvien.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).EndInit();
             this.panel_sukien.ResumeLayout(false);
             this.panel_sukien.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_events)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
             this.panel_themadmin.ResumeLayout(false);
             this.panel_themadmin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_admins)).EndInit();
-            this.panel_cuusinhvien.ResumeLayout(false);
-            this.panel_cuusinhvien.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -636,5 +672,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn eventdateDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn soluongthamgiaDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ComboBox comboBox_fillkhoa;
+        private System.Windows.Forms.BindingSource khoaBindingSource;
+        private QuanLy_CSVDataSetTableAdapters.KhoaTableAdapter khoaTableAdapter;
+        private System.Windows.Forms.BindingSource khoaBindingSource1;
     }
 }

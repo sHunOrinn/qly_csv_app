@@ -23,7 +23,41 @@ namespace qly_csv_app.UI.Admin
 
         private void add_event_view_Load(object sender, EventArgs e)
         {
+            LoadKhoa(); // Load danh sách khoa trước
             SetDefaultValues();
+        }
+
+        private void LoadKhoa()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = "SELECT khoa_id, ten_khoa FROM Khoa ORDER BY ten_khoa";
+                    
+                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    // Thêm dòng "Chọn khoa" ở đầu
+                    DataRow emptyRow = dt.NewRow();
+                    emptyRow["khoa_id"] = 0;
+                    emptyRow["ten_khoa"] = "-- Chọn khoa tổ chức --";
+                    dt.Rows.InsertAt(emptyRow, 0);
+
+                    cb_khoa.DisplayMember = "ten_khoa";
+                    cb_khoa.ValueMember = "khoa_id";
+                    cb_khoa.DataSource = dt;
+                    cb_khoa.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách khoa: " + ex.Message, "Lỗi", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void SetDefaultValues()
@@ -73,6 +107,15 @@ namespace qly_csv_app.UI.Admin
                 return false;
             }
 
+            // Kiểm tra khoa được chọn
+            if (cb_khoa.SelectedValue == null || Convert.ToInt32(cb_khoa.SelectedValue) == 0)
+            {
+                MessageBox.Show("Vui lòng chọn khoa tổ chức sự kiện!", "Thông báo", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cb_khoa.Focus();
+                return false;
+            }
+
             // Kiểm tra mô tả (tùy chọn nhưng nếu có thì kiểm tra độ dài)
             if (!string.IsNullOrEmpty(txt_description.Text) && txt_description.Text.Length > 1000)
             {
@@ -110,9 +153,9 @@ namespace qly_csv_app.UI.Admin
                         return;
                     }
 
-                    // Thêm sự kiện mới
-                    string insertQuery = @"INSERT INTO Event (event_name, event_date, description, so_luong_tham_gia) 
-                                          VALUES (@event_name, @event_date, @description, @so_luong_tham_gia)";
+                    // Thêm sự kiện mới (bao gồm khoa_id)
+                    string insertQuery = @"INSERT INTO Event (event_name, event_date, description, so_luong_tham_gia, khoa_id) 
+                                          VALUES (@event_name, @event_date, @description, @so_luong_tham_gia, @khoa_id)";
                     
                     SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
                     insertCommand.Parameters.AddWithValue("@event_name", txt_event_name.Text.Trim());
@@ -120,6 +163,7 @@ namespace qly_csv_app.UI.Admin
                     insertCommand.Parameters.AddWithValue("@description", 
                         string.IsNullOrWhiteSpace(txt_description.Text) ? (object)DBNull.Value : txt_description.Text.Trim());
                     insertCommand.Parameters.AddWithValue("@so_luong_tham_gia", 0); // Ban đầu là 0
+                    insertCommand.Parameters.AddWithValue("@khoa_id", Convert.ToInt32(cb_khoa.SelectedValue));
 
                     int result = insertCommand.ExecuteNonQuery();
                     
@@ -150,7 +194,8 @@ namespace qly_csv_app.UI.Admin
         {
             // Xác nhận trước khi hủy nếu đã nhập dữ liệu
             if (!string.IsNullOrWhiteSpace(txt_event_name.Text) || 
-                !string.IsNullOrWhiteSpace(txt_description.Text))
+                !string.IsNullOrWhiteSpace(txt_description.Text) ||
+                (cb_khoa.SelectedValue != null && Convert.ToInt32(cb_khoa.SelectedValue) != 0))
             {
                 DialogResult result = MessageBox.Show(
                     "Bạn có chắc chắn muốn hủy? Dữ liệu đã nhập sẽ bị mất!", 
