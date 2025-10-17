@@ -273,6 +273,9 @@
     <EmbeddedResource Include="UI\Admin\add_csv_view.resx">
       <DependentUpon>add_csv_view.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Admin\add_event_view.resx">
+      <DependentUpon>add_event_view.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Admin\admin_view.resx">
       <DependentUpon>admin_view.cs</DependentUpon>
     </EmbeddedResource>

@@ -190,15 +190,13 @@
             // 
             // comboBox_fillkhoa
             // 
-            this.comboBox_fillkhoa.DataSource = this.khoaBindingSource1;
-            this.comboBox_fillkhoa.DisplayMember = "ten_khoa";
+            this.comboBox_fillkhoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_fillkhoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox_fillkhoa.FormattingEnabled = true;
             this.comboBox_fillkhoa.Location = new System.Drawing.Point(419, 19);
             this.comboBox_fillkhoa.Name = "comboBox_fillkhoa";
             this.comboBox_fillkhoa.Size = new System.Drawing.Size(203, 31);
             this.comboBox_fillkhoa.TabIndex = 8;
-            this.comboBox_fillkhoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_fillkhoa.SelectedIndexChanged += new System.EventHandler(this.comboBox_fillkhoa_SelectedIndexChanged);
             // 
             // khoaBindingSource1
