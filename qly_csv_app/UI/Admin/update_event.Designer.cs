@@ -31,20 +31,6 @@
             this.groupBox_event_info = new System.Windows.Forms.GroupBox();
             this.cb_khoa = new System.Windows.Forms.ComboBox();
             this.label_khoa = new System.Windows.Forms.Label();
-            this.label_event_name = new System.Windows.Forms.Label();
-            this.txt_event_name = new System.Windows.Forms.TextBox();
-            this.label_event_date = new System.Windows.Forms.Label();
-            this.dtp_event_date = new System.Windows.Forms.DateTimePicker();
-            this.label_description = new System.Windows.Forms.Label();
-            this.txt_description = new System.Windows.Forms.TextBox();
-            this.label_participants = new System.Windows.Forms.Label();
-            this.label_event_name = new System.Windows.Forms.Label();
-            this.txt_event_name = new System.Windows.Forms.TextBox();
-            this.label_event_date = new System.Windows.Forms.Label();
-            this.dtp_event_date = new System.Windows.Forms.DateTimePicker();
-            this.label_description = new System.Windows.Forms.Label();
-            this.txt_description = new System.Windows.Forms.TextBox();
-            this.label_participants = new System.Windows.Forms.Label();
             this.txt_participants = new System.Windows.Forms.TextBox();
             this.label_participants = new System.Windows.Forms.Label();
             this.txt_description = new System.Windows.Forms.TextBox();
@@ -69,8 +55,22 @@
             this.groupBox_event_info.Controls.Add(this.label_participants);
             this.groupBox_event_info.Controls.Add(this.txt_description);
             this.groupBox_event_info.Controls.Add(this.label_description);
-            // cb_khoa
+            this.groupBox_event_info.Controls.Add(this.dtp_event_date);
             this.groupBox_event_info.Controls.Add(this.label_event_date);
+            this.groupBox_event_info.Controls.Add(this.txt_event_name);
+            this.groupBox_event_info.Controls.Add(this.label_event_name);
+            this.groupBox_event_info.Controls.Add(this.txt_event_id);
+            this.groupBox_event_info.Controls.Add(this.label_event_id);
+            this.groupBox_event_info.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox_event_info.Location = new System.Drawing.Point(30, 70);
+            this.groupBox_event_info.Name = "groupBox_event_info";
+            this.groupBox_event_info.Size = new System.Drawing.Size(520, 360);
+            this.groupBox_event_info.TabIndex = 0;
+            this.groupBox_event_info.TabStop = false;
+            this.groupBox_event_info.Text = "Thông tin sự kiện";
+            // 
+            // cb_khoa
+            // 
             this.cb_khoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_khoa.Enabled = false;
             this.cb_khoa.FormattingEnabled = true;
@@ -87,9 +87,9 @@
             this.label_khoa.Size = new System.Drawing.Size(122, 23);
             this.label_khoa.TabIndex = 10;
             this.label_khoa.Text = "Khoa tổ chức:*";
-            this.groupBox_event_info.Name = "groupBox_event_info";
+            // 
             // txt_participants
-            this.groupBox_event_info.TabIndex = 0;
+            // 
             this.txt_participants.BackColor = System.Drawing.Color.LightGray;
             this.txt_participants.Enabled = false;
             this.txt_participants.Location = new System.Drawing.Point(150, 307);
@@ -97,34 +97,34 @@
             this.txt_participants.ReadOnly = true;
             this.txt_participants.Size = new System.Drawing.Size(100, 30);
             this.txt_participants.TabIndex = 9;
-            this.label_event_id.Location = new System.Drawing.Point(20, 35);
+            // 
             // label_participants
-            this.label_event_id.Size = new System.Drawing.Size(29, 23);
+            // 
             this.label_participants.AutoSize = true;
             this.label_participants.Location = new System.Drawing.Point(20, 310);
             this.label_participants.Name = "label_participants";
             this.label_participants.Size = new System.Drawing.Size(107, 23);
             this.label_participants.TabIndex = 8;
             this.label_participants.Text = "Số lượng TG:";
-            this.txt_event_id.Location = new System.Drawing.Point(150, 32);
+            // 
             // txt_description
-            this.txt_event_id.ReadOnly = true;
+            // 
             this.txt_description.Location = new System.Drawing.Point(150, 192);
             this.txt_description.Multiline = true;
             this.txt_description.Name = "txt_description";
             this.txt_description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txt_description.Size = new System.Drawing.Size(350, 100);
             this.txt_description.TabIndex = 7;
-            this.label_event_name.AutoSize = true;
-            this.label_event_name.Location = new System.Drawing.Point(20, 75);
-            this.label_event_name.Name = "label_event_name";
+            // 
+            // label_description
+            // 
             this.label_description.AutoSize = true;
             this.label_description.Location = new System.Drawing.Point(20, 195);
             this.label_description.Name = "label_description";
             this.label_description.Size = new System.Drawing.Size(59, 23);
             this.label_description.TabIndex = 6;
             this.label_description.Text = "Mô tả:";
-            this.txt_event_name.Location = new System.Drawing.Point(150, 72);
+            // 
             // dtp_event_date
             // 
             this.dtp_event_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -134,16 +134,16 @@
             this.dtp_event_date.TabIndex = 5;
             // 
             // label_event_date
-            this.label_event_date.Name = "label_event_date";
+            // 
             this.label_event_date.AutoSize = true;
             this.label_event_date.Location = new System.Drawing.Point(20, 115);
             this.label_event_date.Name = "label_event_date";
             this.label_event_date.Size = new System.Drawing.Size(123, 23);
             this.label_event_date.TabIndex = 4;
             this.label_event_date.Text = "Ngày tổ chức:*";
-            this.dtp_event_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            // 
             // txt_event_name
-            this.dtp_event_date.Name = "dtp_event_date";
+            // 
             this.txt_event_name.Location = new System.Drawing.Point(150, 72);
             this.txt_event_name.MaxLength = 255;
             this.txt_event_name.Name = "txt_event_name";
@@ -158,20 +158,6 @@
             this.label_event_name.Size = new System.Drawing.Size(105, 23);
             this.label_event_name.TabIndex = 2;
             this.label_event_name.Text = "Tên sự kiện:*";
-            this.label_description.Location = new System.Drawing.Point(20, 155);
-            this.label_description.Name = "label_description";
-            this.label_description.Size = new System.Drawing.Size(62, 23);
-            this.label_description.TabIndex = 6;
-            this.label_description.Text = "Mô tả:";
-            // 
-            // txt_description
-            // 
-            this.txt_description.Location = new System.Drawing.Point(150, 152);
-            this.txt_description.Multiline = true;
-            this.txt_description.Name = "txt_description";
-            this.txt_description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_description.Size = new System.Drawing.Size(350, 100);
-            this.txt_description.TabIndex = 7;
             // 
             // txt_event_id
             // 

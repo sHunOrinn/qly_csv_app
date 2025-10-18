@@ -20,7 +20,7 @@ namespace qly_csv_app.UI.Admin
         private DateTime originalEventDate;
         private string originalDescription;
         private int originalParticipants;
-        private int originalKhoaId; // Thêm để lưu khoa gốc
+        private int originalKhoaId; 
 
         public update_event()
         {
@@ -132,25 +132,25 @@ namespace qly_csv_app.UI.Admin
         private void btn_cancel_Click(object sender, EventArgs e)
         {
             // Check if there are any changes
-            if (HasChanges())
-            {
+            //if (HasChanges())
+            //{
                 DialogResult result = MessageBox.Show(
-                    "Bạn có thay đổi chưa được lưu. Bạn có chắc chắn muốn hủy?",
+                    "Bạn có chắc chắn muốn hủy?",
                     "Xác nhận hủy",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
-                    this.DialogResult = DialogResult.Cancel;
+                    //this.DialogResult = DialogResult.Cancel;
                     this.Close();
                 }
-            }
-            else
-            {
-                this.DialogResult = DialogResult.Cancel;
-                this.Close();
-            }
+            //}
+            //else
+            //{
+            //    this.DialogResult = DialogResult.Cancel;
+            //    this.Close();
+            //}
         }
 
         private bool ValidateInput()
@@ -283,15 +283,15 @@ namespace qly_csv_app.UI.Admin
             }
         }
 
-        // Override ProcessCmdKey to handle Escape key
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == Keys.Escape)
-            {
-                btn_cancel_Click(null, null);
-                return true;
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
+        //// Override ProcessCmdKey to handle Escape key
+        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //{
+        //    if (keyData == Keys.Escape)
+        //    {
+        //        btn_cancel_Click(null, null);
+        //        return true;
+        //    }
+        //    return base.ProcessCmdKey(ref msg, keyData);
+        //}
     }
 }
