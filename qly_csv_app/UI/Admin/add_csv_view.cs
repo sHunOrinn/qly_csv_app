@@ -23,11 +23,66 @@ namespace qly_csv_app.UI.Admin
 
         private void add_csv_view_Load(object sender, EventArgs e)
         {
-            LoadKhoaHoc();
+            LoadNganh();
             SetDefaultValues();
         }
 
-        private void LoadKhoaHoc()
+        private void LoadNganh()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = @"SELECT n.nganh_id, n.ten_nganh, k.ten_khoa
+                                    FROM Nganh n
+                                    INNER JOIN Khoa k ON n.khoa_id = k.khoa_id
+                                    ORDER BY k.ten_khoa, n.ten_nganh";
+                    
+                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    // Thêm dòng "Chọn ngành" ở đầu
+                    DataRow emptyRow = dt.NewRow();
+                    emptyRow["nganh_id"] = 0;
+                    emptyRow["ten_nganh"] = "-- Chọn ngành --";
+                    emptyRow["ten_khoa"] = "";
+                    dt.Rows.InsertAt(emptyRow, 0);
+
+                    cb_nganh.DisplayMember = "ten_nganh";
+                    cb_nganh.ValueMember = "nganh_id";
+                    cb_nganh.DataSource = dt;
+                    cb_nganh.SelectedIndex = 0;
+                    
+                    // Disable khóa học dropdown ban đầu
+                    cb_khoahoc.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách ngành: " + ex.Message, "Lỗi", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cb_nganh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_nganh.SelectedValue != null && Convert.ToInt32(cb_nganh.SelectedValue) > 0)
+            {
+                LoadKhoaHocByNganh(Convert.ToInt32(cb_nganh.SelectedValue));
+                cb_khoahoc.Enabled = true;
+            }
+            else
+            {
+                cb_khoahoc.DataSource = null;
+                cb_khoahoc.Items.Clear();
+                cb_khoahoc.Enabled = false;
+            }
+        }
+
+        private void LoadKhoaHocByNganh(int nganhId)
         {
             try
             {
@@ -35,22 +90,45 @@ namespace qly_csv_app.UI.Admin
                 {
                     connection.Open();
                     string query = @"SELECT k.khoa_hoc_id, 
-                                           CONCAT(k.ten_khoa_hoc, ' - ', n.ten_nganh) AS display_text
+                                           CONCAT(k.ten_khoa_hoc, ' (', k.nam_bat_dau, ' - ', k.nam_ket_thuc, ')') AS display_text
                                     FROM KhoaHoc k
-                                    INNER JOIN Nganh n ON k.nganh_id = n.nganh_id
+                                    WHERE k.nganh_id = @nganh_id
                                     ORDER BY k.nam_bat_dau DESC";
                     
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@nganh_id", nganhId);
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
 
-                    cb_khoahoc.DisplayMember = "display_text";
-                    cb_khoahoc.ValueMember = "khoa_hoc_id";
-                    cb_khoahoc.DataSource = dt;
-                    
                     if (dt.Rows.Count > 0)
                     {
+                        // Thêm dòng "Chọn khóa học" ở đầu
+                        DataRow emptyRow = dt.NewRow();
+                        emptyRow["khoa_hoc_id"] = 0;
+                        emptyRow["display_text"] = "-- Chọn khóa học --";
+                        dt.Rows.InsertAt(emptyRow, 0);
+
+                        cb_khoahoc.DisplayMember = "display_text";
+                        cb_khoahoc.ValueMember = "khoa_hoc_id";
+                        cb_khoahoc.DataSource = dt;
+                        cb_khoahoc.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        // Không có khóa học nào cho ngành này
+                        DataTable emptyDt = new DataTable();
+                        emptyDt.Columns.Add("khoa_hoc_id", typeof(int));
+                        emptyDt.Columns.Add("display_text", typeof(string));
+                        
+                        DataRow noDataRow = emptyDt.NewRow();
+                        noDataRow["khoa_hoc_id"] = 0;
+                        noDataRow["display_text"] = "-- Không có khóa học --";
+                        emptyDt.Rows.Add(noDataRow);
+
+                        cb_khoahoc.DisplayMember = "display_text";
+                        cb_khoahoc.ValueMember = "khoa_hoc_id";
+                        cb_khoahoc.DataSource = emptyDt;
                         cb_khoahoc.SelectedIndex = 0;
                     }
                 }
@@ -93,6 +171,22 @@ namespace qly_csv_app.UI.Admin
             {
                 MessageBox.Show("Vui lòng nhập MSSV!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txt_mssv.Focus();
+                return false;
+            }
+
+            // Kiểm tra ngành được chọn
+            if (cb_nganh.SelectedValue == null || Convert.ToInt32(cb_nganh.SelectedValue) == 0)
+            {
+                MessageBox.Show("Vui lòng chọn ngành!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cb_nganh.Focus();
+                return false;
+            }
+
+            // Kiểm tra khóa học được chọn
+            if (cb_khoahoc.SelectedValue == null || Convert.ToInt32(cb_khoahoc.SelectedValue) == 0)
+            {
+                MessageBox.Show("Vui lòng chọn khóa học!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cb_khoahoc.Focus();
                 return false;
             }
 
@@ -218,8 +312,13 @@ namespace qly_csv_app.UI.Admin
             txt_email.Clear();
             txt_sodienthoai.Clear();
             dtp_ngaysinh.Value = DateTime.Now.AddYears(-22);
-            if (cb_khoahoc.Items.Count > 0)
-                cb_khoahoc.SelectedIndex = 0;
+            
+            if (cb_nganh.Items.Count > 0)
+                cb_nganh.SelectedIndex = 0;
+            
+            cb_khoahoc.DataSource = null;
+            cb_khoahoc.Items.Clear();
+            cb_khoahoc.Enabled = false;
         }
 
         private void btn_huy_Click(object sender, EventArgs e)
