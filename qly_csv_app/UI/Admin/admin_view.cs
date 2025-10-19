@@ -122,10 +122,12 @@ namespace qly_csv_app.UI.Admin
             LoadKhoa(); // Load danh sách khoa cho bộ lọc
         }
 
+        // Cập nhật btn_danhsachsukien_Click để load khoa cho events
         private void btn_danhsachsukien_Click(object sender, EventArgs e)
         {
             ShowPanel(panel_sukien);
             LoadEventData(); // Tải dữ liệu sự kiện
+            LoadKhoaForEvents(); // Load danh sách khoa cho bộ lọc sự kiện
         }
 
         private void btn_themadmin_Click(object sender, EventArgs e)
@@ -598,10 +600,10 @@ namespace qly_csv_app.UI.Admin
                 connection.Open();
 
                 string query = @"SELECT e.event_id, e.event_name, e.event_date, e.so_luong_tham_gia, 
-                                   e.description, k.ten_khoa, k.khoa_id
-                            FROM Event e
-                            LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
-                            ORDER BY e.event_date DESC";
+                                        e.description, k.ten_khoa, k.khoa_id
+                                FROM Event e
+                                LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
+                                ORDER BY e.event_date DESC";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                 DataTable dataTable = new DataTable();
@@ -612,6 +614,8 @@ namespace qly_csv_app.UI.Admin
 
                 // Lưu trữ dữ liệu gốc để tìm kiếm
                 originalEventDataTable = dataTable.Copy();
+
+                FilterEventsByKhoa(); // Lọc sự kiện theo khoa nếu cần
 
                 // Cấu hình lại các cột
                 ConfigureEventDataGridView();
@@ -625,90 +629,90 @@ namespace qly_csv_app.UI.Admin
         }
 
         private void ConfigureEventDataGridView()
-{
-    try
-    {
-        // Thiết lập AutoGenerateColumns = false để tự quản lý columns
-        dataGridView_events.AutoGenerateColumns = false;
-        dataGridView_events.Columns.Clear();
-
-        // Thêm các cột theo thứ tự mong muốn
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
         {
-            Name = "eventidDataGridViewTextBoxColumn",
-            DataPropertyName = "event_id",
-            HeaderText = "ID",
-            Width = 50,
-            ReadOnly = true
-        });
+            try
+            {
+                // Thiết lập AutoGenerateColumns = false để tự quản lý columns
+                dataGridView_events.AutoGenerateColumns = false;
+                dataGridView_events.Columns.Clear();
 
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "eventnameDataGridViewTextBoxColumn",
-            DataPropertyName = "event_name",
-            HeaderText = "Tên Sự Kiện",
-            Width = 200,
-            ReadOnly = true
-        });
+                // Thêm các cột theo thứ tự mong muốn
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "eventidDataGridViewTextBoxColumn",
+                    DataPropertyName = "event_id",
+                    HeaderText = "ID",
+                    Width = 50,
+                    ReadOnly = true
+                });
 
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "eventdateDataGridViewTextBoxColumn",
-            DataPropertyName = "event_date",
-            HeaderText = "Ngày tổ chức",
-            Width = 120,
-            ReadOnly = true
-        });
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "eventnameDataGridViewTextBoxColumn",
+                    DataPropertyName = "event_name",
+                    HeaderText = "Tên Sự Kiện",
+                    Width = 200,
+                    ReadOnly = true
+                });
 
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "soluongthamgiaDataGridViewTextBoxColumn",
-            DataPropertyName = "so_luong_tham_gia",
-            HeaderText = "Số lượng tham gia",
-            Width = 130,
-            ReadOnly = true
-        });
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "eventdateDataGridViewTextBoxColumn",
+                    DataPropertyName = "event_date",
+                    HeaderText = "Ngày tổ chức",
+                    Width = 120,
+                    ReadOnly = true
+                });
 
-        // Thêm cột mới: Khoa tổ chức
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "tenKhoaDataGridViewTextBoxColumn",
-            DataPropertyName = "ten_khoa",
-            HeaderText = "Khoa tổ chức",
-            Width = 150,
-            ReadOnly = true
-        });
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "soluongthamgiaDataGridViewTextBoxColumn",
+                    DataPropertyName = "so_luong_tham_gia",
+                    HeaderText = "Số lượng tham gia",
+                    Width = 130,
+                    ReadOnly = true
+                });
 
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "descriptionDataGridViewTextBoxColumn",
-            DataPropertyName = "description",
-            HeaderText = "Mô tả",
-            Width = 250,
-            ReadOnly = true
-        });
+                // Thêm cột mới: Khoa tổ chức
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "tenKhoaDataGridViewTextBoxColumn",
+                    DataPropertyName = "ten_khoa",
+                    HeaderText = "Khoa tổ chức",
+                    Width = 150,
+                    ReadOnly = true
+                });
 
-        // Hidden column for khoa_id
-        dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
-        {
-            Name = "khoaIdDataGridViewTextBoxColumn",
-            DataPropertyName = "khoa_id",
-            HeaderText = "Khoa ID",
-            Visible = false
-        });
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "descriptionDataGridViewTextBoxColumn",
+                    DataPropertyName = "description",
+                    HeaderText = "Mô tả",
+                    Width = 400,
+                    ReadOnly = true
+                });
 
-        // Định dạng cột ngày
-        if (dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"] != null)
-        {
-            dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                // Hidden column for khoa_id
+                dataGridView_events.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "khoaIdDataGridViewTextBoxColumn",
+                    DataPropertyName = "khoa_id",
+                    HeaderText = "Khoa ID",
+                    Visible = false
+                });
+
+                // Định dạng cột ngày
+                if (dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"] != null)
+                {
+                    dataGridView_events.Columns["eventdateDataGridViewTextBoxColumn"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cấu hình DataGridView Events: " + ex.Message, "Lỗi", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-    }
-    catch (Exception ex)
-    {
-        MessageBox.Show("Lỗi khi cấu hình DataGridView Events: " + ex.Message, "Lỗi", 
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-    }
-}
 
         private void btn_timkiem_Click(object sender, EventArgs e)
         {
@@ -796,7 +800,28 @@ namespace qly_csv_app.UI.Admin
 
             try
             {
-                DataView dv = new DataView(originalEventDataTable);
+                // Bắt đầu từ dữ liệu đã được lọc theo khoa
+                DataTable sourceTable = originalEventDataTable;
+                
+                // Nếu có lọc theo khoa, áp dụng filter trước
+                if (comboBox_fillkhoa_event?.SelectedValue != null)
+                {
+                    int selectedKhoaId = Convert.ToInt32(comboBox_fillkhoa_event.SelectedValue);
+                    if (selectedKhoaId > 0)
+                    {
+                        DataView khoaFilterView = new DataView(originalEventDataTable);
+                        DataRowView selectedKhoaRow = comboBox_fillkhoa_event.SelectedItem as DataRowView;
+                        if (selectedKhoaRow != null && selectedKhoaRow["ten_khoa"] != null)
+                        {
+                            string selectedKhoaName = selectedKhoaRow["ten_khoa"].ToString().Trim();
+                            string escapedKhoaName = selectedKhoaName.Replace("'", "''");
+                            khoaFilterView.RowFilter = $"(ten_khoa IS NOT NULL) AND (ten_khoa = '{escapedKhoaName}')";
+                            sourceTable = khoaFilterView.ToTable();
+                        }
+                    }
+                }
+
+                DataView dv = new DataView(sourceTable);
                 
                 // Tìm kiếm theo ID, tên sự kiện, mô tả hoặc tên khoa
                 if (int.TryParse(tuKhoa, out int eventId))
@@ -831,12 +856,16 @@ namespace qly_csv_app.UI.Admin
                     MessageBox.Show($"Không tìm thấy sự kiện nào với từ khóa: '{tuKhoa}'", 
                         "Kết quả tìm kiếm", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                else
+                {
+                    label_event_title.Text = $"Kết quả tìm kiếm sự kiện ({dv.Count:N0} sự kiện)";
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Fallback: load lại dữ liệu gốc nếu có lỗi
-                LoadEventData();
+                // Fallback: áp dụng filter theo khoa
+                FilterEventsByKhoa();
             }
         }
 
@@ -1238,5 +1267,139 @@ namespace qly_csv_app.UI.Admin
             changePassForm.Show();
         }
 
+        // Thêm method load khoa cho events
+        private void LoadKhoaForEvents()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = "SELECT khoa_id, ten_khoa FROM Khoa ORDER BY ten_khoa";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    // Thêm dòng "Tất cả khoa" ở đầu
+                    DataRow allRow = dt.NewRow();
+                    allRow["khoa_id"] = 0;
+                    allRow["ten_khoa"] = "-- Tất cả khoa --";
+                    dt.Rows.InsertAt(allRow, 0);
+
+                    comboBox_fillkhoa_event.DisplayMember = "ten_khoa";
+                    comboBox_fillkhoa_event.ValueMember = "khoa_id";
+                    comboBox_fillkhoa_event.DataSource = dt;
+                    comboBox_fillkhoa_event.SelectedIndex = 0; // Chọn "Tất cả khoa" mặc định
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách khoa cho sự kiện: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Thêm event handler cho comboBox_fillkhoa_event
+        private void comboBox_fillkhoa_event_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBox_fillkhoa_event.SelectedItem == null)
+                    return;
+
+                FilterEventsByKhoa();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lọc sự kiện theo khoa: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Thêm method lọc sự kiện theo khoa
+        private void FilterEventsByKhoa()
+        {
+            try
+            {
+                // Kiểm tra dữ liệu gốc
+                if (originalEventDataTable == null || originalEventDataTable.Rows.Count == 0)
+                {
+                    LoadEventData();
+                    return;
+                }
+
+                DataView dv = new DataView(originalEventDataTable);
+                string filterInfo = "Tất cả khoa";
+                string rowFilter = string.Empty;
+
+                // Lọc theo khoa với null check
+                if (comboBox_fillkhoa_event?.SelectedValue != null)
+                {
+                    int selectedKhoaId = Convert.ToInt32(comboBox_fillkhoa_event.SelectedValue);
+                    
+                    if (selectedKhoaId > 0) // Chọn khoa cụ thể
+                    {
+                        DataRowView selectedKhoaRow = comboBox_fillkhoa_event.SelectedItem as DataRowView;
+                        if (selectedKhoaRow != null && selectedKhoaRow["ten_khoa"] != null)
+                        {
+                            string selectedKhoaName = selectedKhoaRow["ten_khoa"].ToString().Trim();
+                            string escapedKhoaName = selectedKhoaName.Replace("'", "''");
+                            rowFilter = $"(ten_khoa IS NOT NULL) AND (ten_khoa = '{escapedKhoaName}')";
+                            filterInfo = selectedKhoaName;
+                        }
+                    }
+                    // Nếu selectedKhoaId = 0, hiển thị tất cả (không filter)
+                }
+
+                dv.RowFilter = rowFilter;
+
+                // Cập nhật DataGridView với dữ liệu đã lọc
+                DataTable filteredTable = dv.ToTable();
+                dataGridView_events.DataSource = filteredTable;
+
+                // Hiển thị thông tin số lượng
+                int totalCount = dv.Count;
+                label_event_title.Text = $"Danh sách sự kiện ({filterInfo}: {totalCount:N0} sự kiện)";
+
+                // Refresh DataGridView
+                dataGridView_events.Refresh();
+
+                // Auto-resize columns nếu có dữ liệu
+                if (totalCount > 0 && dataGridView_events.Columns.Count > 0)
+                {
+                    dataGridView_events.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi với thông báo chi tiết hơn
+                string errorMessage = $"Lỗi khi áp dụng bộ lọc sự kiện: {ex.Message}";
+                System.Diagnostics.Debug.WriteLine(errorMessage);
+                MessageBox.Show(errorMessage, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Fallback: hiển thị tất cả dữ liệu gốc
+                try
+                {
+                    if (originalEventDataTable != null)
+                    {
+                        dataGridView_events.DataSource = originalEventDataTable;
+                        label_event_title.Text = $"Danh sách sự kiện (Tất cả: {originalEventDataTable.Rows.Count:N0} sự kiện)";
+
+                        // Reset ComboBox về vị trí đầu tiên với null check
+                        if (comboBox_fillkhoa_event?.Items?.Count > 0)
+                        {
+                            comboBox_fillkhoa_event.SelectedIndex = 0;
+                        }
+                    }
+                }
+                catch (Exception fallbackEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Lỗi khi fallback: {fallbackEx.Message}");
+                    LoadEventData();
+                }
+            }
+        }
     }
 }
