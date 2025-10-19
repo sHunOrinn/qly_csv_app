@@ -342,8 +342,15 @@ GO
 
 -- Thêm Khoa
 INSERT INTO Khoa (ten_khoa) VALUES 
-(N'Công nghệ thông tin'),
-(N'Kinh tế');
+(N'Công nghệ thông tin');
+
+
+INSERT INTO Khoa (ten_khoa) VALUES 
+(N'Điện - Điện tử'),
+(N'Công trình'),
+(N'Vận tải - kinh tế'),
+(N'Cơ khí'),
+(N'Khoa học cơ bản');
 
 SET IDENTITY_INSERT Khoa ON;
 INSERT INTO Khoa (khoa_id, ten_khoa) VALUES 
@@ -358,6 +365,36 @@ INSERT INTO Nganh (ten_nganh, khoa_id) VALUES
 (N'An toàn thông tin', 1),
 (N'Trí tuệ nhân tạo', 1),
 (N'Quản trị kinh doanh', 2);
+
+--ngành khoa điện điện tử
+INSERT INTO Nganh (ten_nganh, khoa_id) VALUES 
+(N'Kỹ thuật điện', 3),
+(N'Điện tử - Viễn thông', 3),
+(N'Kỹ thuật Điều khiển và Tự động hóa', 3)
+
+--ngành khoa công trình
+INSERT INTO Nganh (ten_nganh, khoa_id) VALUES 
+(N'Kỹ thuật xây dựng', 4),
+(N'Kỹ thuật xây dựng CTGT', 4),
+(N'Kiến trúc', 4),
+(N'Quản lý xây dựng', 4);
+
+--ngành khoa Vận tải - kinh tế
+INSERT INTO Nganh (ten_nganh, khoa_id) VALUES 
+(N'Quản trị Kinh doanh', 5),
+(N'Kế toán', 5),
+(N'Tài chính Ngân hàng', 5),
+(N'Kinh doanh quốc tế', 5),
+(N'Quản trị dịch vụ Du lịch và Lữ hành', 5),
+(N'Logistics và Quản lý chuỗi cung ứng', 5),
+(N'Khai thác vận tải', 5);
+
+--ngành khoa cơ khí
+INSERT INTO Nganh (ten_nganh, khoa_id) VALUES 
+(N'Kỹ thuật Cơ khí động lực', 6),
+(N'Kỹ thuật ô tô', 6);
+
+--ngành khoa 
 
 -- Thêm Khóa học 
 INSERT INTO KhoaHoc (ten_khoa_hoc, nam_bat_dau, nam_ket_thuc, nganh_id) VALUES 
@@ -388,6 +425,57 @@ INSERT INTO KhoaHoc (ten_khoa_hoc, nam_bat_dau, nam_ket_thuc, nganh_id) VALUES
 (N'K62KHMT', 2018, 2022, 3),    -- Khoa học máy tính
 (N'K62ATTT', 2018, 2022, 4),    -- An toàn thông tin
 (N'K62TTNT', 2018, 2022, 5);    -- Trí tuệ nhân tạo
+
+
+INSERT INTO KhoaHoc (ten_khoa_hoc, nam_bat_dau, nam_ket_thuc, nganh_id) VALUES
+-- K64
+(N'K64KTĐ', 2020, 2024, 7),    -- Kỹ thuật điện
+(N'K64DTVT', 2020, 2024, 8),   -- Điện tử - Viễn thông
+(N'K64DKTĐH', 2020, 2024, 9),  -- Kỹ thuật Điều khiển và Tự động hóa
+(N'K64KTXD', 2020, 2024, 10),  -- Kỹ thuật xây dựng
+(N'K64KTXDCTGT', 2020, 2024, 11), -- Kỹ thuật xây dựng CTGT
+(N'K64KTT', 2020, 2024, 12),   -- Kiến trúc
+(N'K64QLXD', 2020, 2024, 13),  -- Quản lý xây dựng
+(N'K64QTKD', 2020, 2024, 14),  -- Quản trị Kinh doanh
+(N'K64KT', 2020, 2024, 15),    -- Kế toán
+(N'K64TCNH', 2020, 2024, 16),  -- Tài chính Ngân hàng
+(N'K64KDQT', 2020, 2024, 17),  -- Kinh doanh quốc tế
+(N'K64QTDVDLLH', 2020, 2024, 18), -- Quản trị dịch vụ Du lịch và Lữ hành
+(N'K64LOG', 2020, 2024, 19),   -- Logistics và Quản lý chuỗi cung ứng
+(N'K64KTVT', 2020, 2024, 20),  -- Khai thác vận tải
+
+-- K63
+(N'K63KTĐ', 2019, 2023, 7),
+(N'K63DTVT', 2019, 2023, 8),
+(N'K63DKTĐH', 2019, 2023, 9),
+(N'K63KTXD', 2019, 2023, 10),
+(N'K63KTXDCTGT', 2019, 2023, 11),
+(N'K63KTT', 2019, 2023, 12),
+(N'K63QLXD', 2019, 2023, 13),
+(N'K63QTKD', 2019, 2023, 14),
+(N'K63KT', 2019, 2023, 15),
+(N'K63TCNH', 2019, 2023, 16),
+(N'K63KDQT', 2019, 2023, 17),
+(N'K63QTDVDLLH', 2019, 2023, 18),
+(N'K63LOG', 2019, 2023, 19),
+(N'K63KTVT', 2019, 2023, 20),
+
+-- K62
+(N'K62KTĐ', 2018, 2022, 7),
+(N'K62DTVT', 2018, 2022, 8),
+(N'K62DKTĐH', 2018, 2022, 9),
+(N'K62KTXD', 2018, 2022, 10),
+(N'K62KTXDCTGT', 2018, 2022, 11),
+(N'K62KTT', 2018, 2022, 12),
+(N'K62QLXD', 2018, 2022, 13),
+(N'K62QTKD', 2018, 2022, 14),
+(N'K62KT', 2018, 2022, 15),
+(N'K62TCNH', 2018, 2022, 16),
+(N'K62KDQT', 2018, 2022, 17),
+(N'K62QTDVDLLH', 2018, 2022, 18),
+(N'K62LOG', 2018, 2022, 19),
+(N'K62KTVT', 2018, 2022, 20);
+
 
 -- Thêm Cựu sinh viên
 INSERT INTO CuuSV (Ten, NgaySinh, MSSV, DC, email, phone, khoa_hoc_id) VALUES 

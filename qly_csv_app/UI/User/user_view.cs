@@ -208,9 +208,10 @@ namespace qly_csv_app.UI.User
                 {
                     connection.Open();
                     string query = @"SELECT p.participation_id, e.event_name, e.event_date, 
-                                   e.description, p.participation_date, p.status
+                                   e.description, p.participation_date, p.status, k.ten_khoa
                             FROM Participation p
                             INNER JOIN Event e ON p.event_id = e.event_id
+                            LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
                             WHERE p.CSV_id = @csv_id and p.status IN (N'Được mời', N'Từ chối')
                             ORDER BY p.participation_date DESC";
             
@@ -282,6 +283,7 @@ namespace qly_csv_app.UI.User
                     connection.Open();
                     string query = @"SELECT p.participation_id, e.event_id, e.event_name, e.event_date, 
                                            e.description, p.participation_date, p.status, p.feedback,
+                                           k.ten_khoa,
                                            CASE 
                                                WHEN e.event_date < CAST(GETDATE() AS DATE) THEN N'Đã diễn ra'
                                                WHEN e.event_date = CAST(GETDATE() AS DATE) THEN N'Đang diễn ra'
@@ -289,6 +291,7 @@ namespace qly_csv_app.UI.User
                                            END AS event_status
                                     FROM Participation p
                                     INNER JOIN Event e ON p.event_id = e.event_id
+                                    LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
                                     WHERE p.CSV_id = @csv_id AND p.status = N'Chấp nhận'
                                     ORDER BY e.event_date DESC";
             
@@ -336,10 +339,12 @@ namespace qly_csv_app.UI.User
             emptyTable.Columns.Add("status", typeof(string));
             emptyTable.Columns.Add("feedback", typeof(string));
             emptyTable.Columns.Add("event_status", typeof(string));
+            emptyTable.Columns.Add("ten_khoa", typeof(string)); // Thêm cột khoa tổ chức
             
             dataGridView_accepted_events.DataSource = emptyTable;
             ConfigureAcceptedEventsDataGridView();
         }
+
 
         private void ConfigureAcceptedEventsDataGridView()
         {
@@ -389,6 +394,17 @@ namespace qly_csv_app.UI.User
                 eventDateColumn.DefaultCellStyle.Format = "dd/MM/yyyy";
                 dataGridView_accepted_events.Columns.Add(eventDateColumn);
 
+                // Thêm cột Khoa tổ chức
+                DataGridViewTextBoxColumn khoaColumn = new DataGridViewTextBoxColumn
+                {
+                    Name = "ten_khoa",
+                    DataPropertyName = "ten_khoa",
+                    HeaderText = "Khoa tổ chức",
+                    Width = 120,
+                    ReadOnly = true
+                };
+                dataGridView_accepted_events.Columns.Add(khoaColumn);
+
                 DataGridViewTextBoxColumn eventStatusColumn = new DataGridViewTextBoxColumn
                 {
                     Name = "event_status",
@@ -404,7 +420,7 @@ namespace qly_csv_app.UI.User
                     Name = "description",
                     DataPropertyName = "description",
                     HeaderText = "Mô Tả",
-                    Width = 150,
+                    Width = 130,
                     ReadOnly = true
                 };
                 dataGridView_accepted_events.Columns.Add(descriptionColumn);
@@ -480,6 +496,7 @@ namespace qly_csv_app.UI.User
             emptyTable.Columns.Add("description", typeof(string));
             emptyTable.Columns.Add("participation_date", typeof(DateTime));
             emptyTable.Columns.Add("status", typeof(string));
+            emptyTable.Columns.Add("ten_khoa", typeof(string)); // Thêm cột khoa tổ chức
             
             dataGridView_invitations.DataSource = emptyTable;
             ConfigureInvitationDataGridView();
@@ -522,12 +539,23 @@ namespace qly_csv_app.UI.User
                 eventDateColumn.DefaultCellStyle.Format = "dd/MM/yyyy";
                 dataGridView_invitations.Columns.Add(eventDateColumn);
 
+                // Thêm cột Khoa tổ chức
+                DataGridViewTextBoxColumn khoaColumn = new DataGridViewTextBoxColumn
+                {
+                    Name = "ten_khoa",
+                    DataPropertyName = "ten_khoa",
+                    HeaderText = "Khoa tổ chức",
+                    Width = 120,
+                    ReadOnly = true
+                };
+                dataGridView_invitations.Columns.Add(khoaColumn);
+
                 DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn
                 {
                     Name = "description",
                     DataPropertyName = "description",
                     HeaderText = "Mô Tả",
-                    Width = 180,
+                    Width = 150,
                     ReadOnly = true
                 };
                 dataGridView_invitations.Columns.Add(descriptionColumn);

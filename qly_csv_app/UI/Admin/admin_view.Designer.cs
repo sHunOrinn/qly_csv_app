@@ -505,7 +505,7 @@
             this.btn_capnhat_event.TabIndex = 5;
             this.btn_capnhat_event.Text = "Cập nhật";
             this.btn_capnhat_event.UseVisualStyleBackColor = false;
-            this.btn_capnhat_event.Click += new System.EventHandler(this.btn_capnhat_event_Click_1);
+            //this.btn_capnhat_event.Click += new System.EventHandler(this.btn_capnhat_event_Click_1);
             // 
             // label_event_title
             // 

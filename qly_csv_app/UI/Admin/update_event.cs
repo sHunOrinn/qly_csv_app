@@ -132,25 +132,29 @@ namespace qly_csv_app.UI.Admin
         private void btn_cancel_Click(object sender, EventArgs e)
         {
             // Check if there are any changes
-            //if (HasChanges())
-            //{
-                DialogResult result = MessageBox.Show(
+            if (HasChanges())
+            {
+                //DialogResult result = MessageBox.Show(
+                //    "Bạn có chắc chắn muốn hủy?",
+                //    "Xác nhận hủy",
+                //    MessageBoxButtons.YesNo,
+                //    MessageBoxIcon.Question);
+
+                if (MessageBox.Show(
                     "Bạn có chắc chắn muốn hủy?",
                     "Xác nhận hủy",
                     MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
+                    MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    //this.DialogResult = DialogResult.Cancel;
+                    this.DialogResult = DialogResult.Cancel;
                     this.Close();
                 }
-            //}
-            //else
-            //{
-            //    this.DialogResult = DialogResult.Cancel;
-            //    this.Close();
-            //}
+            }
+            else
+            {
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+            }
         }
 
         private bool ValidateInput()
@@ -284,14 +288,14 @@ namespace qly_csv_app.UI.Admin
         }
 
         //// Override ProcessCmdKey to handle Escape key
-        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        //{
-        //    if (keyData == Keys.Escape)
-        //    {
-        //        btn_cancel_Click(null, null);
-        //        return true;
-        //    }
-        //    return base.ProcessCmdKey(ref msg, keyData);
-        //}
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                btn_cancel_Click(null, null);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }
