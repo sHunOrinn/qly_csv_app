@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Configuration;
 //using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 using qly_csv_app.Repository;
+using qly_csv_app.UI;
 using qly_csv_app.UI.Admin;
 using qly_csv_app.UI.User;
-using qly_csv_app.UI;
 
 namespace qly_csv_app
 {
@@ -26,6 +27,21 @@ namespace qly_csv_app
         public Form1()
         {
             InitializeComponent();
+            //this.Paint += Form1_Paint;
+            //panel_main.Paint += Form1_Paint;
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            // Vẽ gradient nền tím-xanh
+            using (LinearGradientBrush brush = new LinearGradientBrush(
+                this.ClientRectangle,
+                Color.FromArgb(102, 126, 234), // Màu xanh-tím nhạt
+                Color.FromArgb(118, 75, 162), // Màu tím đậm
+                135f)) // Góc 135 độ
+            {
+                e.Graphics.FillRectangle(brush, this.ClientRectangle);
+            }
         }
 
         private void btn_dangnhap_Click(object sender, EventArgs e)
@@ -125,6 +141,109 @@ namespace qly_csv_app
             forgotPasswordForm = new forgot_password();
             forgotPasswordForm.Show();
 
+        }
+        private void txb_username_Enter(object sender, EventArgs e)
+        {
+            if (txb_username.Text == "Tài khoản")
+            {
+                txb_username.Text = "";
+                txb_username.ForeColor = Color.Black;
+            }
+        }
+
+        private void txb_username_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txb_username.Text))
+            {
+                txb_username.Text = "Tài khoản";
+                txb_username.ForeColor = Color.Gray;
+            }
+        }
+
+        // Xử lý placeholder cho password
+        private void txb_password_Enter(object sender, EventArgs e)
+        {
+            if (txb_password.Text == "Mật khẩu")
+            {
+                txb_password.Text = "";
+                txb_password.ForeColor = Color.Black;
+                txb_password.UseSystemPasswordChar = true;
+            }
+        }
+
+        private void txb_password_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txb_password.Text))
+            {
+                txb_password.Text = "Mật khẩu";
+                txb_password.ForeColor = Color.Gray;
+                txb_password.UseSystemPasswordChar = false;
+            }
+        }
+
+        // Tạo viền bo tròn cho panel login
+        private void panel_login_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            int cornerRadius = 15;
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
+                path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
+                path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
+                path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
+                path.CloseAllFigures();
+
+                panel.Region = new Region(path);
+            }
+        }
+
+        // Tạo viền bo tròn cho panel input
+        private void panel_input_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            int cornerRadius = 8;
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
+                path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
+                path.AddArc(panel.Width - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
+                path.AddArc(0, panel.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
+                path.CloseAllFigures();
+
+                panel.Region = new Region(path);
+            }
+        }
+
+        // Tạo viền bo tròn cho button
+        private void btn_dangnhap_Paint(object sender, PaintEventArgs e)
+        {
+            Button btn = sender as Button;
+            int cornerRadius = 8;
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
+                path.AddArc(btn.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
+                path.AddArc(btn.Width - cornerRadius, btn.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
+                path.AddArc(0, btn.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
+                path.CloseAllFigures();
+
+                btn.Region = new Region(path);
+            }
+        }
+
+        // Hiệu ứng hover cho button
+        private void btn_dangnhap_MouseEnter(object sender, EventArgs e)
+        {
+            btn_dangnhap.BackColor = Color.FromArgb(0, 100, 220);
+        }
+
+        private void btn_dangnhap_MouseLeave(object sender, EventArgs e)
+        {
+            btn_dangnhap.BackColor = Color.FromArgb(0, 123, 255);
         }
     }
 }
