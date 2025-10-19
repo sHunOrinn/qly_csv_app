@@ -37,8 +37,6 @@
             this.panel_content = new System.Windows.Forms.Panel();
             this.panel_cuusinhvien = new System.Windows.Forms.Panel();
             this.comboBox_fillkhoa = new System.Windows.Forms.ComboBox();
-            this.khoaBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
             this.label2 = new System.Windows.Forms.Label();
             this.btn_moithamgiasukien = new System.Windows.Forms.Button();
             this.btn_xoacuusinhvien = new System.Windows.Forms.Button();
@@ -55,6 +53,9 @@
             this.emailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phoneDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cuuSVBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
+            this.comboBox_fillnganh = new System.Windows.Forms.ComboBox();
+            this.label_nganh = new System.Windows.Forms.Label();
             this.panel_sukien = new System.Windows.Forms.Panel();
             this.dataGridView_events = new System.Windows.Forms.DataGridView();
             this.eventidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,22 +75,24 @@
             this.dataGridView_admins = new System.Windows.Forms.DataGridView();
             this.btn_them_admin_new = new System.Windows.Forms.Button();
             this.label_admin_title = new System.Windows.Forms.Label();
+            this.khoaBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.cuuSVTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.CuuSVTableAdapter();
             this.eventTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.EventTableAdapter();
             this.khoaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.khoaTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.KhoaTableAdapter();
+            this.label_khoa = new System.Windows.Forms.Label();
             this.panel_buttons.SuspendLayout();
             this.panel_content.SuspendLayout();
             this.panel_cuusinhvien.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).BeginInit();
             this.panel_sukien.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_events)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventBindingSource)).BeginInit();
             this.panel_themadmin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_admins)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,6 +184,9 @@
             this.panel_cuusinhvien.Controls.Add(this.label1);
             this.panel_cuusinhvien.Controls.Add(this.txt_timkiem);
             this.panel_cuusinhvien.Controls.Add(this.dataGridView1);
+            this.panel_cuusinhvien.Controls.Add(this.comboBox_fillnganh);
+            this.panel_cuusinhvien.Controls.Add(this.label_khoa);
+            this.panel_cuusinhvien.Controls.Add(this.label_nganh);
             this.panel_cuusinhvien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_cuusinhvien.Location = new System.Drawing.Point(0, 0);
             this.panel_cuusinhvien.Name = "panel_cuusinhvien";
@@ -193,21 +199,11 @@
             this.comboBox_fillkhoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_fillkhoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox_fillkhoa.FormattingEnabled = true;
-            this.comboBox_fillkhoa.Location = new System.Drawing.Point(419, 19);
+            this.comboBox_fillkhoa.Location = new System.Drawing.Point(517, 19);
             this.comboBox_fillkhoa.Name = "comboBox_fillkhoa";
             this.comboBox_fillkhoa.Size = new System.Drawing.Size(203, 31);
             this.comboBox_fillkhoa.TabIndex = 8;
             this.comboBox_fillkhoa.SelectedIndexChanged += new System.EventHandler(this.comboBox_fillkhoa_SelectedIndexChanged);
-            // 
-            // khoaBindingSource1
-            // 
-            this.khoaBindingSource1.DataMember = "Khoa";
-            this.khoaBindingSource1.DataSource = this.quanLy_CSVDataSet;
-            // 
-            // quanLy_CSVDataSet
-            // 
-            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
-            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // label2
             // 
@@ -369,6 +365,33 @@
             this.cuuSVBindingSource.DataMember = "CuuSV";
             this.cuuSVBindingSource.DataSource = this.quanLy_CSVDataSet;
             // 
+            // quanLy_CSVDataSet
+            // 
+            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
+            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // comboBox_fillnganh
+            // 
+            this.comboBox_fillnganh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_fillnganh.Enabled = false;
+            this.comboBox_fillnganh.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox_fillnganh.FormattingEnabled = true;
+            this.comboBox_fillnganh.Location = new System.Drawing.Point(815, 19);
+            this.comboBox_fillnganh.Name = "comboBox_fillnganh";
+            this.comboBox_fillnganh.Size = new System.Drawing.Size(203, 31);
+            this.comboBox_fillnganh.TabIndex = 10;
+            this.comboBox_fillnganh.SelectedIndexChanged += new System.EventHandler(this.comboBox_fillnganh_SelectedIndexChanged);
+            // 
+            // label_nganh
+            // 
+            this.label_nganh.AutoSize = true;
+            this.label_nganh.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_nganh.Location = new System.Drawing.Point(745, 23);
+            this.label_nganh.Name = "label_nganh";
+            this.label_nganh.Size = new System.Drawing.Size(66, 23);
+            this.label_nganh.TabIndex = 9;
+            this.label_nganh.Text = "Ngành:";
+            // 
             // panel_sukien
             // 
             this.panel_sukien.Controls.Add(this.dataGridView_events);
@@ -505,7 +528,6 @@
             this.btn_capnhat_event.TabIndex = 5;
             this.btn_capnhat_event.Text = "Cập nhật";
             this.btn_capnhat_event.UseVisualStyleBackColor = false;
-            //this.btn_capnhat_event.Click += new System.EventHandler(this.btn_capnhat_event_Click_1);
             // 
             // label_event_title
             // 
@@ -575,6 +597,11 @@
             this.label_admin_title.TabIndex = 0;
             this.label_admin_title.Text = "Quản lý tài khoản Admin";
             // 
+            // khoaBindingSource1
+            // 
+            this.khoaBindingSource1.DataMember = "Khoa";
+            this.khoaBindingSource1.DataSource = this.quanLy_CSVDataSet;
+            // 
             // cuuSVTableAdapter
             // 
             this.cuuSVTableAdapter.ClearBeforeFill = true;
@@ -592,6 +619,16 @@
             // 
             this.khoaTableAdapter.ClearBeforeFill = true;
             // 
+            // label_khoa
+            // 
+            this.label_khoa.AutoSize = true;
+            this.label_khoa.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_khoa.Location = new System.Drawing.Point(461, 23);
+            this.label_khoa.Name = "label_khoa";
+            this.label_khoa.Size = new System.Drawing.Size(53, 23);
+            this.label_khoa.TabIndex = 9;
+            this.label_khoa.Text = "Khoa:";
+            // 
             // admin_view
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -607,10 +644,9 @@
             this.panel_content.ResumeLayout(false);
             this.panel_cuusinhvien.ResumeLayout(false);
             this.panel_cuusinhvien.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cuuSVBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
             this.panel_sukien.ResumeLayout(false);
             this.panel_sukien.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_events)).EndInit();
@@ -618,6 +654,7 @@
             this.panel_themadmin.ResumeLayout(false);
             this.panel_themadmin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_admins)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.khoaBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -645,6 +682,8 @@
         private System.Windows.Forms.Button btn_them_admin_new;
         private System.Windows.Forms.DataGridView dataGridView_admins;
         private System.Windows.Forms.Panel panel_cuusinhvien;
+        private System.Windows.Forms.ComboBox comboBox_fillnganh;
+        private System.Windows.Forms.Label label_nganh;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_moithamgiasukien;
         private System.Windows.Forms.Button btn_xoacuusinhvien;
@@ -674,5 +713,6 @@
         private System.Windows.Forms.BindingSource khoaBindingSource;
         private QuanLy_CSVDataSetTableAdapters.KhoaTableAdapter khoaTableAdapter;
         private System.Windows.Forms.BindingSource khoaBindingSource1;
+        private System.Windows.Forms.Label label_khoa;
     }
 }

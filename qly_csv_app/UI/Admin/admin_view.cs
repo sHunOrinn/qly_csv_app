@@ -20,6 +20,9 @@ namespace qly_csv_app.UI.Admin
         private DataTable originalEventDataTable; // Lưu trữ dữ liệu sự kiện gốc
         private int currentAdminUserId; // Thêm field để lưu ID admin hiện tại
 
+        // Thêm field để lưu trữ dữ liệu ngành
+        private DataTable originalNganhDataTable;
+
         public admin_view()
         {
             InitializeComponent();
@@ -158,9 +161,6 @@ namespace qly_csv_app.UI.Admin
         {
             try
             {
-                //this.cuuSVTableAdapter.Fill(this.quanLy_CSVDataSet.CuuSV);
-                //originalDataTable = this.quanLy_CSVDataSet.CuuSV.Copy();
-                //txt_timkiem.Clear(); // Xóa text tìm kiếm
                 SqlConnection connection = new SqlConnection(connectString);
                 connection.Open();
                 string query = @"SELECT c.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone,
@@ -179,7 +179,7 @@ namespace qly_csv_app.UI.Admin
 
                 originalDataTable = dataTable.Copy();
 
-                FilterCuuSVByKhoa();
+                FilterCuuSVByKhoaAndNganh(); // SỬA LẠI TỪ FilterCuuSVByKhoa()
 
                 ConfigureCuuSVDataGridView();
 
@@ -199,7 +199,18 @@ namespace qly_csv_app.UI.Admin
                 if (comboBox_fillkhoa.SelectedItem == null)
                     return;
 
-                FilterCuuSVByKhoa();
+                int selectedKhoaId = Convert.ToInt32(comboBox_fillkhoa.SelectedValue);
+                
+                if (selectedKhoaId > 0)
+                {
+                    LoadNganhByKhoa(selectedKhoaId);
+                    comboBox_fillnganh.Enabled = true;
+                }
+                else
+                {
+                    ResetNganhComboBox();
+                    FilterCuuSVByKhoaAndNganh(); // SỬA LẠI TỪ FilterCuuSVByKhoa()
+                }
             }
             catch (Exception ex)
             {
@@ -233,6 +244,9 @@ namespace qly_csv_app.UI.Admin
                     comboBox_fillkhoa.ValueMember = "khoa_id";
                     comboBox_fillkhoa.DataSource = dt;
                     comboBox_fillkhoa.SelectedIndex = 0;
+                    
+                    // Reset comboBox ngành khi load khoa
+                    ResetNganhComboBox();
                 }
             }
             catch (Exception ex)
@@ -242,108 +256,177 @@ namespace qly_csv_app.UI.Admin
             }
         }
 
-        private void FilterCuuSVByKhoa()
+        private void LoadNganhByKhoa(int khoaId)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = @"SELECT nganh_id, ten_nganh 
+                            FROM Nganh 
+                            WHERE khoa_id = @khoa_id 
+                            ORDER BY ten_nganh";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@khoa_id", khoaId);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        // Thêm dòng "Chọn ngành" ở đầu
+                        DataRow emptyRow = dt.NewRow();
+                        emptyRow["nganh_id"] = 0;
+                        emptyRow["ten_nganh"] = "-- Chọn ngành --";
+                        dt.Rows.InsertAt(emptyRow, 0);
+
+                        // Thêm dòng "Tất cả ngành" ở vị trí thứ 2
+                        DataRow allRow = dt.NewRow();
+                        allRow["nganh_id"] = -1;
+                        allRow["ten_nganh"] = "-- Tất cả ngành --";
+                        dt.Rows.InsertAt(allRow, 1);
+
+                        comboBox_fillnganh.DisplayMember = "ten_nganh";
+                        comboBox_fillnganh.ValueMember = "nganh_id";  
+                        comboBox_fillnganh.DataSource = dt;
+                        comboBox_fillnganh.SelectedIndex = 1; // Chọn "Tất cả ngành" mặc định
+                        
+                        originalNganhDataTable = dt.Copy();
+                    }
+                    else
+                    {
+                        // Không có ngành nào trong khoa này
+                        DataTable emptyDt = new DataTable();
+                        emptyDt.Columns.Add("nganh_id", typeof(int));
+                        emptyDt.Columns.Add("ten_nganh", typeof(string));
+                        
+                        DataRow noDataRow = emptyDt.NewRow();
+                        noDataRow["nganh_id"] = 0;
+                        noDataRow["ten_nganh"] = "-- Không có ngành --";
+                        emptyDt.Rows.Add(noDataRow);
+
+                        comboBox_fillnganh.DisplayMember = "ten_nganh";
+                        comboBox_fillnganh.ValueMember = "nganh_id";
+                        comboBox_fillnganh.DataSource = emptyDt;
+                        comboBox_fillnganh.SelectedIndex = 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách ngành: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Thêm event handler cho comboBox_fillnganh
+        private void comboBox_fillnganh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBox_fillnganh.SelectedItem == null)
+                    return;
+
+                FilterCuuSVByKhoaAndNganh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lọc dữ liệu theo ngành: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ResetNganhComboBox()
+        {
+            // Thêm null check để tránh NullReferenceException
+            if (comboBox_fillnganh != null)
+            {
+                comboBox_fillnganh.DataSource = null;
+                comboBox_fillnganh.Items.Clear();
+                comboBox_fillnganh.Enabled = false;
+            }
+            originalNganhDataTable = null;
+        }
+
+        private void FilterCuuSVByKhoaAndNganh()
         {
             try
             {
                 // Kiểm tra dữ liệu gốc
                 if (originalDataTable == null || originalDataTable.Rows.Count == 0)
                 {
-                    LoadCuuSVData(); // Load lại dữ liệu nếu chưa có
-                    return;
-                }
-
-                // Kiểm tra ComboBox có dữ liệu không
-                if (comboBox_fillkhoa.DataSource == null || comboBox_fillkhoa.Items.Count == 0)
-                {
-                    LoadKhoa(); // Load lại danh sách khoa nếu cần
+                    LoadCuuSVData();
                     return;
                 }
 
                 DataView dv = new DataView(originalDataTable);
-                string filterInfo = "Tất cả khoa";
+                string filterInfo = "Tất cả";
+                string rowFilter = string.Empty;
 
-                // Kiểm tra giá trị được chọn với nhiều điều kiện an toàn hơn
-                bool isAllSelected = comboBox_fillkhoa.SelectedValue == null ||
-                                   comboBox_fillkhoa.SelectedValue == DBNull.Value ||
-                                   comboBox_fillkhoa.SelectedIndex <= 0 ||
-                                   Convert.ToInt32(comboBox_fillkhoa.SelectedValue) == 0;
-
-                if (isAllSelected)
+                // Lọc theo khoa
+                int selectedKhoaId = comboBox_fillkhoa.SelectedValue != null ? 
+                    Convert.ToInt32(comboBox_fillkhoa.SelectedValue) : 0;
+                
+                if (selectedKhoaId > 0)
                 {
-                    // Hiển thị tất cả cựu sinh viên
-                    dv.RowFilter = string.Empty;
-                    filterInfo = "Tất cả khoa";
-                }
-                else
-                {
-                    // Lọc theo khoa được chọn
-                    try
+                    DataRowView selectedKhoaRow = comboBox_fillkhoa.SelectedItem as DataRowView;
+                    if (selectedKhoaRow != null && selectedKhoaRow["ten_khoa"] != null)
                     {
-                        DataRowView selectedRow = comboBox_fillkhoa.SelectedItem as DataRowView;
-                        if (selectedRow != null && selectedRow["ten_khoa"] != null && selectedRow["ten_khoa"] != DBNull.Value)
+                        string selectedKhoaName = selectedKhoaRow["ten_khoa"].ToString().Trim();
+                        string escapedKhoaName = selectedKhoaName.Replace("'", "''");
+                        rowFilter = $"(ten_khoa IS NOT NULL) AND (ten_khoa = '{escapedKhoaName}')";
+                        filterInfo = selectedKhoaName;
+
+                        // Lọc thêm theo ngành nếu có chọn ngành cụ thể
+                        int selectedNganhId = comboBox_fillnganh.SelectedValue != null ? 
+                            Convert.ToInt32(comboBox_fillnganh.SelectedValue) : 0;
+
+                        if (selectedNganhId > 0) // Chọn ngành cụ thể (không phải "Tất cả ngành" hoặc "Chọn ngành")
                         {
-                            string selectedKhoaName = selectedRow["ten_khoa"].ToString().Trim();
-
-                            if (!string.IsNullOrEmpty(selectedKhoaName))
+                            DataRowView selectedNganhRow = comboBox_fillnganh.SelectedItem as DataRowView;
+                            if (selectedNganhRow != null && selectedNganhRow["ten_nganh"] != null)
                             {
-                                // Escape single quotes để tránh SQL injection trong RowFilter
-                                string escapedKhoaName = selectedKhoaName.Replace("'", "''");
-
-                                // Lọc theo tên khoa với điều kiện kiểm tra null an toàn hơn
-                                dv.RowFilter = $"(ten_khoa IS NOT NULL) AND (ISNULL(ten_khoa, '') <> '') AND (ten_khoa = '{escapedKhoaName}')";
-                                filterInfo = selectedKhoaName;
-                            }
-                            else
-                            {
-                                // Nếu tên khoa rỗng, hiển thị tất cả
-                                dv.RowFilter = string.Empty;
-                                filterInfo = "Tất cả khoa";
+                                string selectedNganhName = selectedNganhRow["ten_nganh"].ToString().Trim();
+                                string escapedNganhName = selectedNganhName.Replace("'", "''");
+                                rowFilter += $" AND (ten_nganh IS NOT NULL) AND (ten_nganh = '{escapedNganhName}')";
+                                filterInfo = $"{selectedKhoaName} - {selectedNganhName}";
                             }
                         }
-                        else
+                        else if (selectedNganhId == -1) // Chọn "Tất cả ngành"
                         {
-                            // Nếu không thể lấy được thông tin khoa, hiển thị tất cả
-                            dv.RowFilter = string.Empty;
-                            filterInfo = "Tất cả khoa";
+                            // Giữ nguyên filter theo khoa, không thêm filter ngành
                         }
                     }
-                    catch (Exception filterEx)
-                    {
-                        // Log lỗi chi tiết hơn và fallback về hiển thị tất cả
-                        System.Diagnostics.Debug.WriteLine($"Lỗi khi tạo filter: {filterEx.Message}");
-                        dv.RowFilter = string.Empty;
-                        filterInfo = "Tất cả khoa";
-                    }
                 }
+
+                dv.RowFilter = rowFilter;
 
                 // Cập nhật DataGridView với dữ liệu đã lọc
                 DataTable filteredTable = dv.ToTable();
                 dataGridView1.DataSource = filteredTable;
 
-                // Hiển thị thông tin số lượng với format đẹp hơn
+                // Hiển thị thông tin số lượng
                 int totalCount = dv.Count;
                 label2.Text = $"Danh sách cựu SV ({filterInfo}: {totalCount:N0} người)";
 
-                // Refresh DataGridView để đảm bảo hiển thị chính xác
+                // Refresh DataGridView
                 dataGridView1.Refresh();
 
-                // Tự động resize columns nếu cần
+                // Auto-resize columns nếu có dữ liệu
                 if (totalCount > 0 && dataGridView1.Columns.Count > 0)
                 {
-                    // Chỉ auto-resize khi có dữ liệu
                     dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
                 }
-
             }
             catch (Exception ex)
             {
                 // Xử lý lỗi với thông báo chi tiết hơn
-                string errorMessage = $"Lỗi khi áp dụng bộ lọc khoa: {ex.Message}";
+                string errorMessage = $"Lỗi khi áp dụng bộ lọc: {ex.Message}";
                 System.Diagnostics.Debug.WriteLine(errorMessage);
 
-                MessageBox.Show(errorMessage, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(errorMessage, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // Fallback: hiển thị tất cả dữ liệu gốc
                 try
@@ -351,7 +434,7 @@ namespace qly_csv_app.UI.Admin
                     if (originalDataTable != null)
                     {
                         dataGridView1.DataSource = originalDataTable;
-                        label2.Text = $"Danh sách cựu SV (Tất cả khoa: {originalDataTable.Rows.Count:N0} người)";
+                        label2.Text = $"Danh sách cựu SV (Tất cả: {originalDataTable.Rows.Count:N0} người)";
 
                         // Reset ComboBox về vị trí đầu tiên
                         if (comboBox_fillkhoa.Items.Count > 0)
