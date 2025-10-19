@@ -106,7 +106,7 @@ namespace qly_csv_app
             this.panel_username.Location = new System.Drawing.Point(60, 160);
             this.panel_username.Name = "panel_username";
             this.panel_username.Size = new System.Drawing.Size(380, 50);
-            this.panel_username.TabIndex = 2;
+            this.panel_username.TabIndex = 1;
             this.panel_username.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_input_Paint);
             // 
             // txb_username
@@ -130,7 +130,7 @@ namespace qly_csv_app
             this.panel_password.Location = new System.Drawing.Point(60, 230);
             this.panel_password.Name = "panel_password";
             this.panel_password.Size = new System.Drawing.Size(380, 50);
-            this.panel_password.TabIndex = 3;
+            this.panel_password.TabIndex = 2;
             this.panel_password.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_input_Paint);
             // 
             // txb_password
@@ -158,7 +158,7 @@ namespace qly_csv_app
             this.btn_dangnhap.Location = new System.Drawing.Point(60, 300);
             this.btn_dangnhap.Name = "btn_dangnhap";
             this.btn_dangnhap.Size = new System.Drawing.Size(380, 45);
-            this.btn_dangnhap.TabIndex = 2;
+            this.btn_dangnhap.TabIndex = 3;
             this.btn_dangnhap.Text = "Đăng nhập";
             this.btn_dangnhap.UseVisualStyleBackColor = false;
             this.btn_dangnhap.Click += new System.EventHandler(this.btn_dangnhap_Click);
@@ -176,7 +176,7 @@ namespace qly_csv_app
             this.linkLabel_forgot_password.Location = new System.Drawing.Point(66, 357);
             this.linkLabel_forgot_password.Name = "linkLabel_forgot_password";
             this.linkLabel_forgot_password.Size = new System.Drawing.Size(129, 23);
-            this.linkLabel_forgot_password.TabIndex = 3;
+            this.linkLabel_forgot_password.TabIndex = 4;
             this.linkLabel_forgot_password.TabStop = true;
             this.linkLabel_forgot_password.Text = "Quên mật khẩu";
             this.linkLabel_forgot_password.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
