@@ -32,10 +32,13 @@
             this.lbl_title = new System.Windows.Forms.Label();
             this.lbl_cuusv_info = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label_khoa = new System.Windows.Forms.Label();
+            this.comboBox_khoa = new System.Windows.Forms.ComboBox();
             this.dataGridView_invitations = new System.Windows.Forms.DataGridView();
             this.event_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.event_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.event_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ten_khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.participation_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,7 +56,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 60);
+            this.panel1.Size = new System.Drawing.Size(850, 60);
             this.panel1.TabIndex = 0;
             // 
             // lbl_title
@@ -61,7 +64,7 @@
             this.lbl_title.AutoSize = true;
             this.lbl_title.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_title.ForeColor = System.Drawing.Color.White;
-            this.lbl_title.Location = new System.Drawing.Point(203, 15);
+            this.lbl_title.Location = new System.Drawing.Point(240, 15);
             this.lbl_title.Name = "lbl_title";
             this.lbl_title.Size = new System.Drawing.Size(358, 37);
             this.lbl_title.TabIndex = 0;
@@ -89,6 +92,28 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Danh sách các sự kiện đã được mời:";
             // 
+            // label_khoa
+            // 
+            this.label_khoa.AutoSize = true;
+            this.label_khoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_khoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label_khoa.Location = new System.Drawing.Point(450, 155);
+            this.label_khoa.Name = "label_khoa";
+            this.label_khoa.Size = new System.Drawing.Size(79, 23);
+            this.label_khoa.TabIndex = 3;
+            this.label_khoa.Text = "Lọc khoa:";
+            // 
+            // comboBox_khoa
+            // 
+            this.comboBox_khoa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_khoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox_khoa.FormattingEnabled = true;
+            this.comboBox_khoa.Location = new System.Drawing.Point(540, 152);
+            this.comboBox_khoa.Name = "comboBox_khoa";
+            this.comboBox_khoa.Size = new System.Drawing.Size(240, 31);
+            this.comboBox_khoa.TabIndex = 4;
+            this.comboBox_khoa.SelectedIndexChanged += new System.EventHandler(this.comboBox_khoa_SelectedIndexChanged);
+            // 
             // dataGridView_invitations
             // 
             this.dataGridView_invitations.AllowUserToAddRows = false;
@@ -100,17 +125,18 @@
             this.event_id,
             this.event_name,
             this.event_date,
+            this.ten_khoa,
             this.participation_date,
             this.status,
             this.description});
-            this.dataGridView_invitations.Location = new System.Drawing.Point(25, 190);
+            this.dataGridView_invitations.Location = new System.Drawing.Point(25, 200);
             this.dataGridView_invitations.Name = "dataGridView_invitations";
             this.dataGridView_invitations.ReadOnly = true;
             this.dataGridView_invitations.RowHeadersWidth = 51;
             this.dataGridView_invitations.RowTemplate.Height = 28;
             this.dataGridView_invitations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_invitations.Size = new System.Drawing.Size(750, 300);
-            this.dataGridView_invitations.TabIndex = 3;
+            this.dataGridView_invitations.Size = new System.Drawing.Size(800, 300);
+            this.dataGridView_invitations.TabIndex = 5;
             // 
             // event_id
             // 
@@ -128,7 +154,7 @@
             this.event_name.MinimumWidth = 6;
             this.event_name.Name = "event_name";
             this.event_name.ReadOnly = true;
-            this.event_name.Width = 150;
+            this.event_name.Width = 140;
             // 
             // event_date
             // 
@@ -137,7 +163,16 @@
             this.event_date.MinimumWidth = 6;
             this.event_date.Name = "event_date";
             this.event_date.ReadOnly = true;
-            this.event_date.Width = 125;
+            this.event_date.Width = 110;
+            // 
+            // ten_khoa
+            // 
+            this.ten_khoa.DataPropertyName = "ten_khoa";
+            this.ten_khoa.HeaderText = "Khoa Tổ Chức";
+            this.ten_khoa.MinimumWidth = 6;
+            this.ten_khoa.Name = "ten_khoa";
+            this.ten_khoa.ReadOnly = true;
+            this.ten_khoa.Width = 120;
             // 
             // participation_date
             // 
@@ -146,7 +181,7 @@
             this.participation_date.MinimumWidth = 6;
             this.participation_date.Name = "participation_date";
             this.participation_date.ReadOnly = true;
-            this.participation_date.Width = 125;
+            this.participation_date.Width = 110;
             // 
             // status
             // 
@@ -155,7 +190,7 @@
             this.status.MinimumWidth = 6;
             this.status.Name = "status";
             this.status.ReadOnly = true;
-            this.status.Width = 125;
+            this.status.Width = 110;
             // 
             // description
             // 
@@ -164,7 +199,7 @@
             this.description.MinimumWidth = 6;
             this.description.Name = "description";
             this.description.ReadOnly = true;
-            this.description.Width = 200;
+            this.description.Width = 150;
             // 
             // btn_dong
             // 
@@ -174,10 +209,10 @@
             this.btn_dong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_dong.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_dong.ForeColor = System.Drawing.Color.White;
-            this.btn_dong.Location = new System.Drawing.Point(680, 510);
+            this.btn_dong.Location = new System.Drawing.Point(730, 520);
             this.btn_dong.Name = "btn_dong";
             this.btn_dong.Size = new System.Drawing.Size(95, 40);
-            this.btn_dong.TabIndex = 4;
+            this.btn_dong.TabIndex = 6;
             this.btn_dong.Text = "Đóng";
             this.btn_dong.UseVisualStyleBackColor = false;
             this.btn_dong.Click += new System.EventHandler(this.btn_dong_Click);
@@ -187,10 +222,10 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Gray;
-            this.label2.Location = new System.Drawing.Point(25, 520);
+            this.label2.Location = new System.Drawing.Point(25, 530);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(341, 20);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 7;
             this.label2.Text = "Hiển thị tất cả lời mời sự kiện của cựu sinh viên này";
             // 
             // lbl_thongke
@@ -201,7 +236,7 @@
             this.lbl_thongke.Location = new System.Drawing.Point(20, 115);
             this.lbl_thongke.Name = "lbl_thongke";
             this.lbl_thongke.Size = new System.Drawing.Size(285, 23);
-            this.lbl_thongke.TabIndex = 6;
+            this.lbl_thongke.TabIndex = 8;
             this.lbl_thongke.Text = "Tổng số lời mời: 0 | Đã chấp nhận: 0";
             // 
             // event_invited_view
@@ -209,11 +244,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(800, 570);
+            this.ClientSize = new System.Drawing.Size(850, 580);
             this.Controls.Add(this.lbl_thongke);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btn_dong);
             this.Controls.Add(this.dataGridView_invitations);
+            this.Controls.Add(this.comboBox_khoa);
+            this.Controls.Add(this.label_khoa);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbl_cuusv_info);
             this.Controls.Add(this.panel1);
@@ -238,6 +275,8 @@
         private System.Windows.Forms.Label lbl_title;
         private System.Windows.Forms.Label lbl_cuusv_info;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label_khoa;
+        private System.Windows.Forms.ComboBox comboBox_khoa;
         private System.Windows.Forms.DataGridView dataGridView_invitations;
         private System.Windows.Forms.Button btn_dong;
         private System.Windows.Forms.Label label2;
@@ -245,6 +284,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn event_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn event_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn event_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ten_khoa;
         private System.Windows.Forms.DataGridViewTextBoxColumn participation_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn description;
