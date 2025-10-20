@@ -80,11 +80,11 @@ namespace qly_csv_app
             this.lb_title.AutoSize = true;
             this.lb_title.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_title.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lb_title.Location = new System.Drawing.Point(62, 50);
+            this.lb_title.Location = new System.Drawing.Point(152, 50);
             this.lb_title.Name = "lb_title";
-            this.lb_title.Size = new System.Drawing.Size(378, 54);
+            this.lb_title.Size = new System.Drawing.Size(197, 54);
             this.lb_title.TabIndex = 0;
-            this.lb_title.Text = "Chào mừng trở lại!";
+            this.lb_title.Text = "Welcome";
             this.lb_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lb_subtitle
