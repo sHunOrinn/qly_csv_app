@@ -588,15 +588,15 @@ namespace qly_csv_app.UI.Admin
                     ReadOnly = true
                 });
 
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
-                {
-                    Name = "jobStartDateDataGridViewTextBoxColumn",
-                    DataPropertyName = "JobStartDate",
-                    HeaderText = "Ngày bắt đầu",
-                    Width = 100,
-                    ReadOnly = true,
-                    DefaultCellStyle = { Format = "dd/MM/yyyy" }
-                });
+                //dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+                //{
+                //    Name = "jobStartDateDataGridViewTextBoxColumn",
+                //    DataPropertyName = "JobStartDate",
+                //    HeaderText = "Ngày bắt đầu",
+                //    Width = 100,
+                //    ReadOnly = true,
+                //    DefaultCellStyle = { Format = "dd/MM/yyyy" }
+                //});
             }
             catch (Exception ex)
             {

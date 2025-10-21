@@ -48,6 +48,10 @@
             this.btn_huy = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
+            this.label_job = new System.Windows.Forms.Label();
+            this.txt_job = new System.Windows.Forms.TextBox();
+            this.label_company = new System.Windows.Forms.Label();
+            this.txt_company = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,17 +121,6 @@
             this.label6.TabIndex = 5;
             this.label6.Text = "Số điện thoại";
             // 
-            // label_nganh
-            // 
-            this.label_nganh.AutoSize = true;
-            this.label_nganh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_nganh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label_nganh.Location = new System.Drawing.Point(80, 340);
-            this.label_nganh.Name = "label_nganh";
-            this.label_nganh.Size = new System.Drawing.Size(59, 23);
-            this.label_nganh.TabIndex = 6;
-            this.label_nganh.Text = "Ngành";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -138,6 +131,17 @@
             this.label7.Size = new System.Drawing.Size(82, 23);
             this.label7.TabIndex = 7;
             this.label7.Text = "Khóa học";
+            // 
+            // label_nganh
+            // 
+            this.label_nganh.AutoSize = true;
+            this.label_nganh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_nganh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label_nganh.Location = new System.Drawing.Point(80, 340);
+            this.label_nganh.Name = "label_nganh";
+            this.label_nganh.Size = new System.Drawing.Size(62, 23);
+            this.label_nganh.TabIndex = 6;
+            this.label_nganh.Text = "Ngành";
             // 
             // txt_hoten
             // 
@@ -232,7 +236,7 @@
             this.btn_them.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_them.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_them.ForeColor = System.Drawing.Color.White;
-            this.btn_them.Location = new System.Drawing.Point(220, 430);
+            this.btn_them.Location = new System.Drawing.Point(220, 502);
             this.btn_them.Name = "btn_them";
             this.btn_them.Size = new System.Drawing.Size(130, 40);
             this.btn_them.TabIndex = 16;
@@ -248,7 +252,7 @@
             this.btn_huy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_huy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_huy.ForeColor = System.Drawing.Color.White;
-            this.btn_huy.Location = new System.Drawing.Point(370, 430);
+            this.btn_huy.Location = new System.Drawing.Point(370, 501);
             this.btn_huy.Name = "btn_huy";
             this.btn_huy.Size = new System.Drawing.Size(130, 40);
             this.btn_huy.TabIndex = 17;
@@ -277,12 +281,58 @@
             this.label8.TabIndex = 0;
             this.label8.Text = "Thêm Cựu Sinh Viên";
             // 
+            // label_job
+            // 
+            this.label_job.AutoSize = true;
+            this.label_job.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label_job.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label_job.Location = new System.Drawing.Point(79, 420);
+            this.label_job.Name = "label_job";
+            this.label_job.Size = new System.Drawing.Size(147, 23);
+            this.label_job.TabIndex = 19;
+            this.label_job.Text = "Công việc hiện tại";
+            // 
+            // txt_job
+            // 
+            this.txt_job.BackColor = System.Drawing.Color.White;
+            this.txt_job.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_job.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txt_job.Location = new System.Drawing.Point(242, 417);
+            this.txt_job.Name = "txt_job";
+            this.txt_job.Size = new System.Drawing.Size(258, 30);
+            this.txt_job.TabIndex = 20;
+            // 
+            // label_company
+            // 
+            this.label_company.AutoSize = true;
+            this.label_company.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label_company.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label_company.Location = new System.Drawing.Point(80, 460);
+            this.label_company.Name = "label_company";
+            this.label_company.Size = new System.Drawing.Size(70, 23);
+            this.label_company.TabIndex = 21;
+            this.label_company.Text = "Công ty";
+            // 
+            // txt_company
+            // 
+            this.txt_company.BackColor = System.Drawing.Color.White;
+            this.txt_company.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_company.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txt_company.Location = new System.Drawing.Point(220, 457);
+            this.txt_company.Name = "txt_company";
+            this.txt_company.Size = new System.Drawing.Size(280, 30);
+            this.txt_company.TabIndex = 22;
+            // 
             // add_csv_view
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(580, 500);
+            this.ClientSize = new System.Drawing.Size(580, 596);
+            this.Controls.Add(this.label_job);
+            this.Controls.Add(this.txt_job);
+            this.Controls.Add(this.label_company);
+            this.Controls.Add(this.txt_company);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_huy);
             this.Controls.Add(this.btn_them);
@@ -338,5 +388,9 @@
         private System.Windows.Forms.Button btn_huy;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label_job;
+        private System.Windows.Forms.Label label_company;
+        private System.Windows.Forms.TextBox txt_job;
+        private System.Windows.Forms.TextBox txt_company;
     }
 }

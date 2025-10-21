@@ -254,8 +254,9 @@ namespace qly_csv_app.UI.Admin
                 {
                     connection.Open();
                     string query = @"INSERT INTO CuuSV (Ten, NgaySinh, MSSV, DC, email, phone, khoa_hoc_id) 
-                                    VALUES (@Ten, @NgaySinh, @MSSV, @DC, @email, @phone, @khoa_hoc_id)";
-                    
+                            VALUES (@Ten, @NgaySinh, @MSSV, @DC, @email, @phone, @khoa_hoc_id);
+                            SELECT SCOPE_IDENTITY();";
+
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Ten", txt_hoten.Text.Trim());
                     command.Parameters.AddWithValue("@NgaySinh", dtp_ngaysinh.Value.Date);
@@ -265,41 +266,50 @@ namespace qly_csv_app.UI.Admin
                     command.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txt_sodienthoai.Text) ? (object)DBNull.Value : txt_sodienthoai.Text.Trim());
                     command.Parameters.AddWithValue("@khoa_hoc_id", cb_khoahoc.SelectedValue);
 
-                    int result = command.ExecuteNonQuery();
-                    
-                    if (result > 0)
+                    // Lấy ID vừa thêm
+                    object resultObj = command.ExecuteScalar();
+                    int newCsvId = Convert.ToInt32(resultObj);
+
+                    // Nếu có nhập công việc hoặc công ty thì thêm vào bảng Job
+                    string jobTitle = txt_job.Text.Trim();
+                    string company = txt_company.Text.Trim();
+                    if (!string.IsNullOrEmpty(jobTitle) || !string.IsNullOrEmpty(company))
                     {
-                        MessageBox.Show("Thêm cựu sinh viên thành công!", "Thành công", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        
-                        // Reset form
-                        ClearForm();
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
+                        string jobQuery = @"INSERT INTO Job (ViTri, CTY, start_date, CSV_id)
+                                    VALUES (@ViTri, @CTY, @StartDate, @CSV_id)";
+                        SqlCommand jobCmd = new SqlCommand(jobQuery, connection);
+                        jobCmd.Parameters.AddWithValue("@ViTri", string.IsNullOrEmpty(jobTitle) ? (object)DBNull.Value : jobTitle);
+                        jobCmd.Parameters.AddWithValue("@CTY", string.IsNullOrEmpty(company) ? (object)DBNull.Value : company);
+                        jobCmd.Parameters.AddWithValue("@StartDate", DateTime.Now.Date);
+                        jobCmd.Parameters.AddWithValue("@CSV_id", newCsvId);
+                        jobCmd.ExecuteNonQuery();
                     }
-                    else
-                    {
-                        MessageBox.Show("Không thể thêm cựu sinh viên!", "Lỗi", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+
+                    MessageBox.Show("Thêm cựu sinh viên thành công!", "Thành công",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Reset form
+                    ClearForm();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
             }
             catch (SqlException ex)
             {
                 if (ex.Number == 2627) // Unique constraint violation
                 {
-                    MessageBox.Show("MSSV hoặc Email đã tồn tại trong hệ thống!", "Lỗi", 
+                    MessageBox.Show("MSSV hoặc Email đã tồn tại trong hệ thống!", "Lỗi",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Lỗi", 
+                    MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Lỗi",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi thêm cựu sinh viên: " + ex.Message, "Lỗi", 
+                MessageBox.Show("Lỗi khi thêm cựu sinh viên: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
