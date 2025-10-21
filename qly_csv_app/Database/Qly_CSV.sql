@@ -83,6 +83,7 @@ CREATE TABLE Contribution (
     amount DECIMAL(10,2),
     contribution_date DATE,
     details NVARCHAR(MAX),
+	event_id int foreign key references Event(event_id),
     FOREIGN KEY (CSV_id) REFERENCES CuuSV(CSV_id),
 );
 

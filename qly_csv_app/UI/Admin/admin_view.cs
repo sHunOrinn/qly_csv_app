@@ -609,29 +609,6 @@ namespace qly_csv_app.UI.Admin
         {
             try
             {
-                //// Load data into the DataSet first
-                //this.eventTableAdapter.Fill(this.quanLy_CSVDataSet.Event);
-                
-                //// Set the binding source to use the updated DataSet
-                //eventBindingSource.DataSource = this.quanLy_CSVDataSet;
-                //eventBindingSource.DataMember = "Event";
-                
-                //// Make sure the DataGridView uses the binding source
-                //dataGridView_events.DataSource = eventBindingSource;
-                
-                //// Copy data for search functionality
-                //using (SqlConnection connection = new SqlConnection(connectString))
-                //{
-                //    connection.Open();
-                //    string query = @"SELECT event_id, event_name, event_date, so_luong_tham_gia, description
-                //                    FROM Event 
-                //                    ORDER BY event_date DESC";
-                    
-                //    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                //    DataTable dataTable = new DataTable();
-                //    adapter.Fill(dataTable);
-                //    originalEventDataTable = dataTable.Copy();
-                //}
                 SqlConnection connection = new SqlConnection(connectString);
                 connection.Open();
 
