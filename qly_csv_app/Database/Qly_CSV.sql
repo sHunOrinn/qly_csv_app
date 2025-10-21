@@ -524,6 +524,8 @@ select * from Contribution
 
 select * from Event
 
+select * from Job
+
 SELECT c.contribution_id, c.contribution_type, c.amount, 
        c.contribution_date, c.details, csv.Ten as contributor_name,
        p.participation_date, p.status as participation_status,
