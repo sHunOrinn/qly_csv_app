@@ -166,9 +166,9 @@
             // 
             // panel_content
             // 
+            this.panel_content.Controls.Add(this.panel_cuusinhvien);
             this.panel_content.Controls.Add(this.panel_sukien);
             this.panel_content.Controls.Add(this.panel_themadmin);
-            this.panel_content.Controls.Add(this.panel_cuusinhvien);
             this.panel_content.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_content.Location = new System.Drawing.Point(200, 0);
             this.panel_content.Name = "panel_content";
