@@ -56,6 +56,9 @@ CREATE TABLE Job (
 ALTER TABLE Job
 DROP COLUMN start_date;
 
+ALTER TABLE Job
+add start_date date
+
 CREATE TABLE Event (
     event_id INT PRIMARY KEY IDENTITY(1,1),
 	khoa_id int,
