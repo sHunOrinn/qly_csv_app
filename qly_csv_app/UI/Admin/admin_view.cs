@@ -168,16 +168,16 @@ namespace qly_csv_app.UI.Admin
                 string query = @"
                                 SELECT c.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone,
                                        kh.ten_khoa_hoc, n.ten_nganh, k.ten_khoa,
-                                       j.ViTri AS JobTitle, j.CTY AS Company, j.start_date AS JobStartDate
+                                       j.ViTri AS JobTitle, j.CTY AS Company
                                 FROM CuuSV c
                                 LEFT JOIN KhoaHoc kh ON c.khoa_hoc_id = kh.khoa_hoc_id
                                 LEFT JOIN Nganh n ON kh.nganh_id = n.nganh_id
                                 LEFT JOIN Khoa k ON n.khoa_id = k.khoa_id
                                 OUTER APPLY (
-                                    SELECT TOP 1 ViTri, CTY, start_date
+                                    SELECT TOP 1 ViTri, CTY
                                     FROM Job
                                     WHERE CSV_id = c.CSV_id
-                                    ORDER BY start_date DESC, job_id DESC
+                                    ORDER BY job_id DESC
                                 ) j
                                 ORDER BY c.Ten";
 
@@ -587,16 +587,6 @@ namespace qly_csv_app.UI.Admin
                     Width = 150,
                     ReadOnly = true
                 });
-
-                //dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
-                //{
-                //    Name = "jobStartDateDataGridViewTextBoxColumn",
-                //    DataPropertyName = "JobStartDate",
-                //    HeaderText = "Ngày bắt đầu",
-                //    Width = 100,
-                //    ReadOnly = true,
-                //    DefaultCellStyle = { Format = "dd/MM/yyyy" }
-                //});
             }
             catch (Exception ex)
             {

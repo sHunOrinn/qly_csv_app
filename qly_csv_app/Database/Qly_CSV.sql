@@ -49,11 +49,12 @@ CREATE TABLE Job (
     job_id INT PRIMARY KEY IDENTITY(1,1),
     ViTri NVARCHAR(255) NOT NULL,
     CTY NVARCHAR(255),
-    achievements NVARCHAR(MAX),
-    start_date DATE,
     CSV_id INT,
     FOREIGN KEY (CSV_id) REFERENCES CuuSV(CSV_id) ON DELETE CASCADE
 );
+
+ALTER TABLE Job
+DROP COLUMN start_date;
 
 CREATE TABLE Event (
     event_id INT PRIMARY KEY IDENTITY(1,1),

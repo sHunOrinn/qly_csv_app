@@ -271,16 +271,15 @@ namespace qly_csv_app.UI.Admin
                     int newCsvId = Convert.ToInt32(resultObj);
 
                     // Nếu có nhập công việc hoặc công ty thì thêm vào bảng Job
-                    string jobTitle = txt_job.Text.Trim();
-                    string company = txt_company.Text.Trim();
+                    string jobTitle = txt_job != null ? txt_job.Text.Trim() : "";
+                    string company = txt_company != null ? txt_company.Text.Trim() : "";
                     if (!string.IsNullOrEmpty(jobTitle) || !string.IsNullOrEmpty(company))
                     {
-                        string jobQuery = @"INSERT INTO Job (ViTri, CTY, start_date, CSV_id)
-                                    VALUES (@ViTri, @CTY, @StartDate, @CSV_id)";
+                        string jobQuery = @"INSERT INTO Job (ViTri, CTY, CSV_id)
+                                    VALUES (@ViTri, @CTY, @CSV_id)";
                         SqlCommand jobCmd = new SqlCommand(jobQuery, connection);
                         jobCmd.Parameters.AddWithValue("@ViTri", string.IsNullOrEmpty(jobTitle) ? (object)DBNull.Value : jobTitle);
                         jobCmd.Parameters.AddWithValue("@CTY", string.IsNullOrEmpty(company) ? (object)DBNull.Value : company);
-                        jobCmd.Parameters.AddWithValue("@StartDate", DateTime.Now.Date);
                         jobCmd.Parameters.AddWithValue("@CSV_id", newCsvId);
                         jobCmd.ExecuteNonQuery();
                     }
