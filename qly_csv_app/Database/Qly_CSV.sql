@@ -78,6 +78,9 @@ CREATE TABLE Event (
 	FOREIGN KEY (khoa_id) REFERENCES Khoa(khoa_id)
 );
 
+--insert into Event (khoa_id, event_name, description) values
+--(1, N'test', N'')
+
 CREATE TABLE Participation (
     participation_id INT PRIMARY KEY IDENTITY(1,1),
     CSV_id INT,
