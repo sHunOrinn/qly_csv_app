@@ -985,29 +985,61 @@ namespace qly_csv_app.UI.Admin
                 using (SqlConnection connection = new SqlConnection(connectString))
                 {
                     connection.Open();
-                    string query = "DELETE FROM CuuSV WHERE CSV_id = @CSV_id";
-                    //xóa tài khoản liên quan
-                    string deleteUserQuery = "DELETE FROM [User] WHERE CSV_id = @CSV_id";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@CSV_id", csvId);
-
-                    int rowsAffected = command.ExecuteNonQuery();
-                    
-                    if (rowsAffected > 0)
+                    using (SqlTransaction transaction = connection.BeginTransaction())
                     {
-                        // Xóa tài khoản người dùng liên quan
-                        SqlCommand deleteUserCommand = new SqlCommand(deleteUserQuery, connection);
-                        deleteUserCommand.Parameters.AddWithValue("@CSV_id", csvId);
-                        deleteUserCommand.ExecuteNonQuery();
+                        try
+                        {
+                            // Xóa các bản ghi liên quan trước khi xóa CuuSV
+                            // 1. Xóa bảng Job trước
+                            //string deleteJobQuery = "DELETE FROM Job WHERE CSV_id = @CSV_id";
+                            //SqlCommand deleteJobCmd = new SqlCommand(deleteJobQuery, connection, transaction);
+                            //deleteJobCmd.Parameters.AddWithValue("@CSV_id", csvId);
+                            //deleteJobCmd.ExecuteNonQuery();
 
-                        MessageBox.Show("Xóa cựu sinh viên thành công!", "Thành công", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadCuuSVData(); // Tải lại dữ liệu
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không thể xóa cựu sinh viên!", "Lỗi", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            // 2. Xóa bảng Participation
+                            string deleteParticipationQuery = "DELETE FROM Participation WHERE CSV_id = @CSV_id";
+                            SqlCommand deleteParticipationCmd = new SqlCommand(deleteParticipationQuery, connection, transaction);
+                            deleteParticipationCmd.Parameters.AddWithValue("@CSV_id", csvId);
+                            deleteParticipationCmd.ExecuteNonQuery();
+
+                            // 3. Xóa bảng Contribution
+                            string deleteContributionQuery = "DELETE FROM Contribution WHERE CSV_id = @CSV_id";
+                            SqlCommand deleteContributionCmd = new SqlCommand(deleteContributionQuery, connection, transaction);
+                            deleteContributionCmd.Parameters.AddWithValue("@CSV_id", csvId);
+                            deleteContributionCmd.ExecuteNonQuery();
+
+                            // 4. Xóa tài khoản User
+                            string deleteUserQuery = "DELETE FROM [User] WHERE CSV_id = @CSV_id";
+                            SqlCommand deleteUserCmd = new SqlCommand(deleteUserQuery, connection, transaction);
+                            deleteUserCmd.Parameters.AddWithValue("@CSV_id", csvId);
+                            deleteUserCmd.ExecuteNonQuery();
+
+                            // 5. Cuối cùng xóa CuuSV
+                            string deleteCuuSVQuery = "DELETE FROM CuuSV WHERE CSV_id = @CSV_id";
+                            SqlCommand deleteCuuSVCmd = new SqlCommand(deleteCuuSVQuery, connection, transaction);
+                            deleteCuuSVCmd.Parameters.AddWithValue("@CSV_id", csvId);
+
+                            int rowsAffected = deleteCuuSVCmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit();
+                                MessageBox.Show("Xóa cựu sinh viên thành công!", "Thành công",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                LoadCuuSVData(); // Tải lại dữ liệu
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Không thể xóa cựu sinh viên!", "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        catch (Exception innerEx)
+                        {
+                            transaction.Rollback();
+                            throw innerEx;
+                        }
                     }
                 }
             }

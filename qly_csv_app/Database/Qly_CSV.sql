@@ -185,23 +185,6 @@ BEGIN
 END;
 GO
 
--- 6. TRIGGER: Kiểm tra ngày bắt đầu công việc hợp lệ
-CREATE TRIGGER trg_Job_ValidateStartDate
-ON Job
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    IF EXISTS (
-        SELECT 1 FROM inserted i
-        INNER JOIN CuuSV c ON i.CSV_id = c.CSV_id
-        WHERE i.start_date < c.NgaySinh 
-    )
-    BEGIN
-        RAISERROR('Ngày bắt đầu công việc không hợp lệ!', 16, 1);
-        ROLLBACK TRANSACTION;
-    END;
-END;
-GO
 
 -- 7. TRIGGER: Kiểm tra số điện thoại hợp lệ (10 số và bắt đầu bằng 0)
 CREATE TRIGGER trg_CuuSV_ValidatePhone
@@ -525,6 +508,16 @@ select * from Contribution
 select * from Event
 
 select * from Job
+
+INSERT INTO CuuSV (Ten, NgaySinh, MSSV, DC, email, phone, khoa_hoc_id) VALUES 
+(N'Nguyễn Văn a', '2000-05-15', 'SV19041', N'123 Đường ABC, Hà Nội', 'nguyen4anan@gmail.com', '0987664321', 1);
+
+INSERT INTO Job (ViTri, CTY, CSV_id)
+VALUES (N'abc', N'abc', 36)
+
+delete from CuuSV where CSV_id = 36
+
+delete from [User] where user_id = 31
 
 SELECT c.contribution_id, c.contribution_type, c.amount, 
        c.contribution_date, c.details, csv.Ten as contributor_name,
