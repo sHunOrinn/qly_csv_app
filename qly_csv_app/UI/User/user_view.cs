@@ -153,38 +153,68 @@ namespace qly_csv_app.UI.User
                 using (SqlConnection connection = new SqlConnection(connectString))
                 {
                     connection.Open();
-                    string query = @"SELECT u.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone, j.Vitri, j.CTY
-                                    FROM [User] u
-                                    INNER JOIN CuuSV c ON u.CSV_id = c.CSV_id
-                                    JOIN Job j ON c.CSV_id = j.CSV_id
-                                    WHERE u.user_id = @user_id";
-                    
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@user_id", currentUserId);
-                    
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.Read())
+
+                    // First check if user exists and get CSV_id
+                    string checkUserQuery = @"SELECT CSV_id FROM [User] WHERE user_id = @user_id";
+                    SqlCommand checkCommand = new SqlCommand(checkUserQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@user_id", currentUserId);
+
+                    object csvIdResult = checkCommand.ExecuteScalar();
+                    if (csvIdResult == null)
                     {
-                        currentCsvId = Convert.ToInt32(reader["CSV_id"]);
-                        txt_hoten.Text = reader["Ten"]?.ToString();
-                        
-                        // Handle potential null date
-                        if (reader["NgaySinh"] != DBNull.Value)
-                        {
-                            dtp_ngaysinh.Value = Convert.ToDateTime(reader["NgaySinh"]);
-                        }
-                        
-                        txt_mssv.Text = reader["MSSV"]?.ToString();
-                        txt_diachi.Text = reader["DC"]?.ToString();
-                        txt_email.Text = reader["email"]?.ToString();
-                        txt_phone.Text = reader["phone"]?.ToString();
-                        txt_congty.Text = reader["CTY"]?.ToString();
-                        txt_congviec.Text = reader["Vitri"]?.ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không tìm thấy thông tin người dùng!", "Thông báo", 
+                        MessageBox.Show("Không tìm thấy thông tin tài khoản!", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    currentCsvId = Convert.ToInt32(csvIdResult);
+
+                    // Now get detailed user information with LEFT JOIN for Job table
+                    string query = @"SELECT u.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone, 
+                                   j.Vitri, j.CTY
+                            FROM [User] u
+                            INNER JOIN CuuSV c ON u.CSV_id = c.CSV_id
+                            LEFT JOIN Job j ON c.CSV_id = j.CSV_id AND j.job_id = (
+                                SELECT TOP 1 job_id 
+                                FROM Job 
+                                WHERE CSV_id = c.CSV_id 
+                                ORDER BY job_id DESC
+                            )
+                            WHERE u.user_id = @user_id";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.CommandTimeout = 30; // Thêm timeout
+                    command.Parameters.AddWithValue("@user_id", currentUserId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            currentCsvId = Convert.ToInt32(reader["CSV_id"]);
+                            txt_hoten.Text = reader["Ten"]?.ToString() ?? "";
+
+                            // Handle potential null date
+                            if (reader["NgaySinh"] != DBNull.Value)
+                            {
+                                dtp_ngaysinh.Value = Convert.ToDateTime(reader["NgaySinh"]);
+                            }
+                            else
+                            {
+                                dtp_ngaysinh.Value = DateTime.Now.AddYears(-25); // Default age
+                            }
+
+                            txt_mssv.Text = reader["MSSV"]?.ToString() ?? "";
+                            txt_diachi.Text = reader["DC"]?.ToString() ?? "";
+                            txt_email.Text = reader["email"]?.ToString() ?? "";
+                            txt_phone.Text = reader["phone"]?.ToString() ?? "";
+                            txt_congty.Text = reader["CTY"]?.ToString() ?? "";
+                            txt_congviec.Text = reader["Vitri"]?.ToString() ?? "";
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy thông tin chi tiết người dùng!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
                 }
             }

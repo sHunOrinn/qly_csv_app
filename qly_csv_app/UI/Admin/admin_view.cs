@@ -163,37 +163,41 @@ namespace qly_csv_app.UI.Admin
         {
             try
             {
-                SqlConnection connection = new SqlConnection(connectString);
-                connection.Open();
-                string query = @"
-                                SELECT c.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone,
-                                       kh.ten_khoa_hoc, n.ten_nganh, k.ten_khoa,
-                                       j.ViTri AS JobTitle, j.CTY AS Company
-                                FROM CuuSV c
-                                LEFT JOIN KhoaHoc kh ON c.khoa_hoc_id = kh.khoa_hoc_id
-                                LEFT JOIN Nganh n ON kh.nganh_id = n.nganh_id
-                                LEFT JOIN Khoa k ON n.khoa_id = k.khoa_id
-                                OUTER APPLY (
-                                    SELECT TOP 1 ViTri, CTY
-                                    FROM Job
-                                    WHERE CSV_id = c.CSV_id
-                                    ORDER BY job_id DESC
-                                ) j
-                                ORDER BY c.Ten";
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
+                    string query = @"
+                            SELECT c.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone,
+                                   kh.ten_khoa_hoc, n.ten_nganh, k.ten_khoa,
+                                   j.ViTri AS JobTitle, j.CTY AS Company
+                            FROM CuuSV c
+                            LEFT JOIN KhoaHoc kh ON c.khoa_hoc_id = kh.khoa_hoc_id
+                            LEFT JOIN Nganh n ON kh.nganh_id = n.nganh_id
+                            LEFT JOIN Khoa k ON n.khoa_id = k.khoa_id
+                            OUTER APPLY (
+                                SELECT TOP 1 ViTri, CTY
+                                FROM Job
+                                WHERE CSV_id = c.CSV_id
+                                ORDER BY job_id DESC
+                            ) j
+                            ORDER BY c.Ten";
 
-                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                    {
+                        // Tăng timeout cho command
+                        adapter.SelectCommand.CommandTimeout = 60; // 60 giây
 
-                dataGridView1.DataSource = dataTable;
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
 
-                originalDataTable = dataTable.Copy();
+                        dataGridView1.DataSource = dataTable;
+                        originalDataTable = dataTable.Copy();
 
-                FilterCuuSVByKhoaAndNganh();
-
-                ConfigureCuuSVDataGridView();
-
-                txt_timkiem.Clear();
+                        FilterCuuSVByKhoaAndNganh();
+                        ConfigureCuuSVDataGridView();
+                        txt_timkiem.Clear();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -599,31 +603,47 @@ namespace qly_csv_app.UI.Admin
         {
             try
             {
-                SqlConnection connection = new SqlConnection(connectString);
-                connection.Open();
+                using (SqlConnection connection = new SqlConnection(connectString))
+                {
+                    connection.Open();
 
-                string query = @"SELECT e.event_id, e.event_name, e.event_date, e.so_luong_tham_gia, 
-                                        e.description, k.ten_khoa, k.khoa_id
-                                FROM Event e
-                                LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
-                                ORDER BY e.event_date DESC";
+                    string query = @"SELECT e.event_id, e.event_name, e.event_date, e.so_luong_tham_gia, 
+                                    e.description, k.ten_khoa, k.khoa_id
+                            FROM Event e
+                            LEFT JOIN Khoa k ON e.khoa_id = k.khoa_id
+                            ORDER BY e.event_date DESC";
 
-                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                    {
+                        // Tăng timeout cho command
+                        adapter.SelectCommand.CommandTimeout = 60; // 60 giây
 
-                // Cập nhật DataGridView với dữ liệu mới
-                dataGridView_events.DataSource = dataTable;
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
 
-                // Lưu trữ dữ liệu gốc để tìm kiếm
-                originalEventDataTable = dataTable.Copy();
+                        // Configure the DataGridView columns first
+                        ConfigureEventDataGridView();
 
-                FilterEventsByKhoa(); // Lọc sự kiện theo khoa nếu cần
+                        // Set the DataSource
+                        dataGridView_events.DataSource = dataTable;
 
-                // Cấu hình lại các cột
-                ConfigureEventDataGridView();
+                        // Store original data for filtering and searching
+                        originalEventDataTable = dataTable.Copy();
 
-                txt_timkiem_event.Clear();
+                        // Apply filters if needed
+                        FilterEventsByKhoa();
+
+                        // Update the label to show count
+                        int eventCount = dataTable.Rows.Count;
+                        if (label_event_title != null)
+                        {
+                            label_event_title.Text = $"Danh sách sự kiện (Tổng: {eventCount:N0} sự kiện)";
+                        }
+
+                        // Clear search box
+                        txt_timkiem_event.Clear();
+                    }
+                }
             }
             catch (Exception ex)
             {
