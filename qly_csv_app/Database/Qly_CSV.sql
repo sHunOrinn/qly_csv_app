@@ -42,8 +42,17 @@ CREATE TABLE [User] (
     role_type NVARCHAR(100) CHECK (role_type IN (N'admin', N'Cựu sinh viên', N'giảng viên')) NOT NULL,
     is_active BIT DEFAULT 1,
     CSV_id INT NULL,
-    FOREIGN KEY (CSV_id) REFERENCES CuuSV(CSV_id) ON DELETE SET NULL
+    FOREIGN KEY (CSV_id) REFERENCES CuuSV(CSV_id) ON DELETE CASCADE
 );
+
+-- 1. Xóa ràng buộc khóa ngoại hiện tại
+ALTER TABLE [User] 
+DROP CONSTRAINT FK__User__CSV_id__27F8EE98; -- Tên constraint có thể khác, kiểm tra tên chính xác
+
+-- 2. Thêm lại ràng buộc khóa ngoại mới với CASCADE
+ALTER TABLE [User] 
+ADD CONSTRAINT FK_User_CuuSV 
+FOREIGN KEY (CSV_id) REFERENCES CuuSV(CSV_id) ON DELETE CASCADE;
 
 CREATE TABLE Job (
     job_id INT PRIMARY KEY IDENTITY(1,1),
@@ -518,6 +527,8 @@ VALUES (N'abc', N'abc', 36)
 delete from CuuSV where CSV_id = 36
 
 delete from [User] where user_id = 31
+
+delete from [User] where role_type = N'Cựu sinh viên' and CSV_id is null
 
 SELECT c.contribution_id, c.contribution_type, c.amount, 
        c.contribution_date, c.details, csv.Ten as contributor_name,

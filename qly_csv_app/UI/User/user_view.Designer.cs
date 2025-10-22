@@ -36,6 +36,19 @@
             this.btn_danhsachloimoi = new System.Windows.Forms.Button();
             this.lbl_welcome = new System.Windows.Forms.Label();
             this.panel_content = new System.Windows.Forms.Panel();
+            this.panel_loimoi = new System.Windows.Forms.Panel();
+            this.dataGridView_invitations = new System.Windows.Forms.DataGridView();
+            this.eventidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.participationidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSVidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.participationdateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.feedbackDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.participationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
+            this.btn_chapnhan = new System.Windows.Forms.Button();
+            this.btn_tuchoi = new System.Windows.Forms.Button();
+            this.label_loimoi_title = new System.Windows.Forms.Label();
             this.panel_sukienthamgia = new System.Windows.Forms.Panel();
             this.dataGridView_accepted_events = new System.Windows.Forms.DataGridView();
             this.label_accepted_events_title = new System.Windows.Forms.Label();
@@ -55,31 +68,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label_thongtin_title = new System.Windows.Forms.Label();
-            this.panel_loimoi = new System.Windows.Forms.Panel();
-            this.dataGridView_invitations = new System.Windows.Forms.DataGridView();
-            this.eventidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.participationidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSVidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.participationdateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.feedbackDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.participationBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.quanLy_CSVDataSet = new qly_csv_app.QuanLy_CSVDataSet();
-            this.btn_chapnhan = new System.Windows.Forms.Button();
-            this.btn_tuchoi = new System.Windows.Forms.Button();
-            this.label_loimoi_title = new System.Windows.Forms.Label();
             this.participationTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.ParticipationTableAdapter();
             this.eventBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.eventTableAdapter = new qly_csv_app.QuanLy_CSVDataSetTableAdapters.EventTableAdapter();
             this.panel_sidebar.SuspendLayout();
             this.panel_content.SuspendLayout();
-            this.panel_sukienthamgia.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_accepted_events)).BeginInit();
-            this.panel_thongtin.SuspendLayout();
             this.panel_loimoi.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_invitations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.participationBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).BeginInit();
+            this.panel_sukienthamgia.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_accepted_events)).BeginInit();
+            this.panel_thongtin.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -173,14 +173,159 @@
             // panel_content
             // 
             this.panel_content.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
+            this.panel_content.Controls.Add(this.panel_thongtin);
             this.panel_content.Controls.Add(this.panel_loimoi);
             this.panel_content.Controls.Add(this.panel_sukienthamgia);
-            this.panel_content.Controls.Add(this.panel_thongtin);
             this.panel_content.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_content.Location = new System.Drawing.Point(220, 0);
             this.panel_content.Name = "panel_content";
             this.panel_content.Size = new System.Drawing.Size(1026, 450);
             this.panel_content.TabIndex = 1;
+            // 
+            // panel_loimoi
+            // 
+            this.panel_loimoi.Controls.Add(this.dataGridView_invitations);
+            this.panel_loimoi.Controls.Add(this.btn_chapnhan);
+            this.panel_loimoi.Controls.Add(this.btn_tuchoi);
+            this.panel_loimoi.Controls.Add(this.label_loimoi_title);
+            this.panel_loimoi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_loimoi.Location = new System.Drawing.Point(0, 0);
+            this.panel_loimoi.Name = "panel_loimoi";
+            this.panel_loimoi.Size = new System.Drawing.Size(1026, 450);
+            this.panel_loimoi.TabIndex = 0;
+            this.panel_loimoi.Visible = false;
+            // 
+            // dataGridView_invitations
+            // 
+            this.dataGridView_invitations.AllowUserToAddRows = false;
+            this.dataGridView_invitations.AllowUserToDeleteRows = false;
+            this.dataGridView_invitations.AutoGenerateColumns = false;
+            this.dataGridView_invitations.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView_invitations.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView_invitations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_invitations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.eventidDataGridViewTextBoxColumn,
+            this.participationidDataGridViewTextBoxColumn,
+            this.cSVidDataGridViewTextBoxColumn,
+            this.participationdateDataGridViewTextBoxColumn,
+            this.feedbackDataGridViewTextBoxColumn,
+            this.statusDataGridViewTextBoxColumn});
+            this.dataGridView_invitations.DataSource = this.participationBindingSource;
+            this.dataGridView_invitations.Location = new System.Drawing.Point(20, 60);
+            this.dataGridView_invitations.Name = "dataGridView_invitations";
+            this.dataGridView_invitations.ReadOnly = true;
+            this.dataGridView_invitations.RowHeadersWidth = 51;
+            this.dataGridView_invitations.RowTemplate.Height = 24;
+            this.dataGridView_invitations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_invitations.Size = new System.Drawing.Size(994, 320);
+            this.dataGridView_invitations.TabIndex = 3;
+            // 
+            // eventidDataGridViewTextBoxColumn
+            // 
+            this.eventidDataGridViewTextBoxColumn.DataPropertyName = "event_id";
+            this.eventidDataGridViewTextBoxColumn.HeaderText = "event_id";
+            this.eventidDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.eventidDataGridViewTextBoxColumn.Name = "eventidDataGridViewTextBoxColumn";
+            this.eventidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.eventidDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // participationidDataGridViewTextBoxColumn
+            // 
+            this.participationidDataGridViewTextBoxColumn.DataPropertyName = "participation_id";
+            this.participationidDataGridViewTextBoxColumn.HeaderText = "participation_id";
+            this.participationidDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.participationidDataGridViewTextBoxColumn.Name = "participationidDataGridViewTextBoxColumn";
+            this.participationidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.participationidDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // cSVidDataGridViewTextBoxColumn
+            // 
+            this.cSVidDataGridViewTextBoxColumn.DataPropertyName = "CSV_id";
+            this.cSVidDataGridViewTextBoxColumn.HeaderText = "CSV_id";
+            this.cSVidDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.cSVidDataGridViewTextBoxColumn.Name = "cSVidDataGridViewTextBoxColumn";
+            this.cSVidDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cSVidDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // participationdateDataGridViewTextBoxColumn
+            // 
+            this.participationdateDataGridViewTextBoxColumn.DataPropertyName = "participation_date";
+            this.participationdateDataGridViewTextBoxColumn.HeaderText = "participation_date";
+            this.participationdateDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.participationdateDataGridViewTextBoxColumn.Name = "participationdateDataGridViewTextBoxColumn";
+            this.participationdateDataGridViewTextBoxColumn.ReadOnly = true;
+            this.participationdateDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // feedbackDataGridViewTextBoxColumn
+            // 
+            this.feedbackDataGridViewTextBoxColumn.DataPropertyName = "feedback";
+            this.feedbackDataGridViewTextBoxColumn.HeaderText = "feedback";
+            this.feedbackDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.feedbackDataGridViewTextBoxColumn.Name = "feedbackDataGridViewTextBoxColumn";
+            this.feedbackDataGridViewTextBoxColumn.ReadOnly = true;
+            this.feedbackDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            this.statusDataGridViewTextBoxColumn.DataPropertyName = "status";
+            this.statusDataGridViewTextBoxColumn.HeaderText = "status";
+            this.statusDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
+            this.statusDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // participationBindingSource
+            // 
+            this.participationBindingSource.DataMember = "Participation";
+            this.participationBindingSource.DataSource = this.quanLy_CSVDataSet;
+            // 
+            // quanLy_CSVDataSet
+            // 
+            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
+            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // btn_chapnhan
+            // 
+            this.btn_chapnhan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+            this.btn_chapnhan.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_chapnhan.FlatAppearance.BorderSize = 0;
+            this.btn_chapnhan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_chapnhan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_chapnhan.ForeColor = System.Drawing.Color.White;
+            this.btn_chapnhan.Location = new System.Drawing.Point(20, 400);
+            this.btn_chapnhan.Name = "btn_chapnhan";
+            this.btn_chapnhan.Size = new System.Drawing.Size(120, 35);
+            this.btn_chapnhan.TabIndex = 1;
+            this.btn_chapnhan.Text = "Chấp nhận";
+            this.btn_chapnhan.UseVisualStyleBackColor = false;
+            this.btn_chapnhan.Click += new System.EventHandler(this.btn_chapnhan_Click);
+            // 
+            // btn_tuchoi
+            // 
+            this.btn_tuchoi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.btn_tuchoi.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_tuchoi.FlatAppearance.BorderSize = 0;
+            this.btn_tuchoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_tuchoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_tuchoi.ForeColor = System.Drawing.Color.White;
+            this.btn_tuchoi.Location = new System.Drawing.Point(160, 400);
+            this.btn_tuchoi.Name = "btn_tuchoi";
+            this.btn_tuchoi.Size = new System.Drawing.Size(120, 35);
+            this.btn_tuchoi.TabIndex = 2;
+            this.btn_tuchoi.Text = "Từ chối";
+            this.btn_tuchoi.UseVisualStyleBackColor = false;
+            this.btn_tuchoi.Click += new System.EventHandler(this.btn_tuchoi_Click);
+            // 
+            // label_loimoi_title
+            // 
+            this.label_loimoi_title.AutoSize = true;
+            this.label_loimoi_title.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_loimoi_title.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(58)))), ((int)(((byte)(64)))));
+            this.label_loimoi_title.Location = new System.Drawing.Point(20, 20);
+            this.label_loimoi_title.Name = "label_loimoi_title";
+            this.label_loimoi_title.Size = new System.Drawing.Size(244, 37);
+            this.label_loimoi_title.TabIndex = 0;
+            this.label_loimoi_title.Text = "Danh sách lời mời";
             // 
             // panel_sukienthamgia
             // 
@@ -405,151 +550,6 @@
             this.label_thongtin_title.TabIndex = 0;
             this.label_thongtin_title.Text = "Thông tin cá nhân";
             // 
-            // panel_loimoi
-            // 
-            this.panel_loimoi.Controls.Add(this.dataGridView_invitations);
-            this.panel_loimoi.Controls.Add(this.btn_chapnhan);
-            this.panel_loimoi.Controls.Add(this.btn_tuchoi);
-            this.panel_loimoi.Controls.Add(this.label_loimoi_title);
-            this.panel_loimoi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_loimoi.Location = new System.Drawing.Point(0, 0);
-            this.panel_loimoi.Name = "panel_loimoi";
-            this.panel_loimoi.Size = new System.Drawing.Size(1026, 450);
-            this.panel_loimoi.TabIndex = 0;
-            this.panel_loimoi.Visible = false;
-            // 
-            // dataGridView_invitations
-            // 
-            this.dataGridView_invitations.AllowUserToAddRows = false;
-            this.dataGridView_invitations.AllowUserToDeleteRows = false;
-            this.dataGridView_invitations.AutoGenerateColumns = false;
-            this.dataGridView_invitations.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView_invitations.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView_invitations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_invitations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.eventidDataGridViewTextBoxColumn,
-            this.participationidDataGridViewTextBoxColumn,
-            this.cSVidDataGridViewTextBoxColumn,
-            this.participationdateDataGridViewTextBoxColumn,
-            this.feedbackDataGridViewTextBoxColumn,
-            this.statusDataGridViewTextBoxColumn});
-            this.dataGridView_invitations.DataSource = this.participationBindingSource;
-            this.dataGridView_invitations.Location = new System.Drawing.Point(20, 60);
-            this.dataGridView_invitations.Name = "dataGridView_invitations";
-            this.dataGridView_invitations.ReadOnly = true;
-            this.dataGridView_invitations.RowHeadersWidth = 51;
-            this.dataGridView_invitations.RowTemplate.Height = 24;
-            this.dataGridView_invitations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_invitations.Size = new System.Drawing.Size(994, 320);
-            this.dataGridView_invitations.TabIndex = 3;
-            // 
-            // eventidDataGridViewTextBoxColumn
-            // 
-            this.eventidDataGridViewTextBoxColumn.DataPropertyName = "event_id";
-            this.eventidDataGridViewTextBoxColumn.HeaderText = "event_id";
-            this.eventidDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.eventidDataGridViewTextBoxColumn.Name = "eventidDataGridViewTextBoxColumn";
-            this.eventidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.eventidDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // participationidDataGridViewTextBoxColumn
-            // 
-            this.participationidDataGridViewTextBoxColumn.DataPropertyName = "participation_id";
-            this.participationidDataGridViewTextBoxColumn.HeaderText = "participation_id";
-            this.participationidDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.participationidDataGridViewTextBoxColumn.Name = "participationidDataGridViewTextBoxColumn";
-            this.participationidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.participationidDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // cSVidDataGridViewTextBoxColumn
-            // 
-            this.cSVidDataGridViewTextBoxColumn.DataPropertyName = "CSV_id";
-            this.cSVidDataGridViewTextBoxColumn.HeaderText = "CSV_id";
-            this.cSVidDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.cSVidDataGridViewTextBoxColumn.Name = "cSVidDataGridViewTextBoxColumn";
-            this.cSVidDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cSVidDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // participationdateDataGridViewTextBoxColumn
-            // 
-            this.participationdateDataGridViewTextBoxColumn.DataPropertyName = "participation_date";
-            this.participationdateDataGridViewTextBoxColumn.HeaderText = "participation_date";
-            this.participationdateDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.participationdateDataGridViewTextBoxColumn.Name = "participationdateDataGridViewTextBoxColumn";
-            this.participationdateDataGridViewTextBoxColumn.ReadOnly = true;
-            this.participationdateDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // feedbackDataGridViewTextBoxColumn
-            // 
-            this.feedbackDataGridViewTextBoxColumn.DataPropertyName = "feedback";
-            this.feedbackDataGridViewTextBoxColumn.HeaderText = "feedback";
-            this.feedbackDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.feedbackDataGridViewTextBoxColumn.Name = "feedbackDataGridViewTextBoxColumn";
-            this.feedbackDataGridViewTextBoxColumn.ReadOnly = true;
-            this.feedbackDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            this.statusDataGridViewTextBoxColumn.DataPropertyName = "status";
-            this.statusDataGridViewTextBoxColumn.HeaderText = "status";
-            this.statusDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
-            this.statusDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // participationBindingSource
-            // 
-            this.participationBindingSource.DataMember = "Participation";
-            this.participationBindingSource.DataSource = this.quanLy_CSVDataSet;
-            // 
-            // quanLy_CSVDataSet
-            // 
-            this.quanLy_CSVDataSet.DataSetName = "QuanLy_CSVDataSet";
-            this.quanLy_CSVDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // btn_chapnhan
-            // 
-            this.btn_chapnhan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-            this.btn_chapnhan.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_chapnhan.FlatAppearance.BorderSize = 0;
-            this.btn_chapnhan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_chapnhan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_chapnhan.ForeColor = System.Drawing.Color.White;
-            this.btn_chapnhan.Location = new System.Drawing.Point(20, 400);
-            this.btn_chapnhan.Name = "btn_chapnhan";
-            this.btn_chapnhan.Size = new System.Drawing.Size(120, 35);
-            this.btn_chapnhan.TabIndex = 1;
-            this.btn_chapnhan.Text = "Chấp nhận";
-            this.btn_chapnhan.UseVisualStyleBackColor = false;
-            this.btn_chapnhan.Click += new System.EventHandler(this.btn_chapnhan_Click);
-            // 
-            // btn_tuchoi
-            // 
-            this.btn_tuchoi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.btn_tuchoi.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_tuchoi.FlatAppearance.BorderSize = 0;
-            this.btn_tuchoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_tuchoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_tuchoi.ForeColor = System.Drawing.Color.White;
-            this.btn_tuchoi.Location = new System.Drawing.Point(160, 400);
-            this.btn_tuchoi.Name = "btn_tuchoi";
-            this.btn_tuchoi.Size = new System.Drawing.Size(120, 35);
-            this.btn_tuchoi.TabIndex = 2;
-            this.btn_tuchoi.Text = "Từ chối";
-            this.btn_tuchoi.UseVisualStyleBackColor = false;
-            this.btn_tuchoi.Click += new System.EventHandler(this.btn_tuchoi_Click);
-            // 
-            // label_loimoi_title
-            // 
-            this.label_loimoi_title.AutoSize = true;
-            this.label_loimoi_title.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_loimoi_title.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(58)))), ((int)(((byte)(64)))));
-            this.label_loimoi_title.Location = new System.Drawing.Point(20, 20);
-            this.label_loimoi_title.Name = "label_loimoi_title";
-            this.label_loimoi_title.Size = new System.Drawing.Size(244, 37);
-            this.label_loimoi_title.TabIndex = 0;
-            this.label_loimoi_title.Text = "Danh sách lời mời";
-            // 
             // participationTableAdapter
             // 
             this.participationTableAdapter.ClearBeforeFill = true;
@@ -576,16 +576,16 @@
             this.Load += new System.EventHandler(this.user_view_Load);
             this.panel_sidebar.ResumeLayout(false);
             this.panel_content.ResumeLayout(false);
-            this.panel_sukienthamgia.ResumeLayout(false);
-            this.panel_sukienthamgia.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_accepted_events)).EndInit();
-            this.panel_thongtin.ResumeLayout(false);
-            this.panel_thongtin.PerformLayout();
             this.panel_loimoi.ResumeLayout(false);
             this.panel_loimoi.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_invitations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.participationBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
+            this.panel_sukienthamgia.ResumeLayout(false);
+            this.panel_sukienthamgia.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_accepted_events)).EndInit();
+            this.panel_thongtin.ResumeLayout(false);
+            this.panel_thongtin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventBindingSource)).EndInit();
             this.ResumeLayout(false);
 

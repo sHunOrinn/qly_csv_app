@@ -1009,10 +1009,10 @@ namespace qly_csv_app.UI.Admin
                             deleteContributionCmd.ExecuteNonQuery();
 
                             // 4. Xóa tài khoản User
-                            string deleteUserQuery = "DELETE FROM [User] WHERE CSV_id = @CSV_id";
-                            SqlCommand deleteUserCmd = new SqlCommand(deleteUserQuery, connection, transaction);
-                            deleteUserCmd.Parameters.AddWithValue("@CSV_id", csvId);
-                            deleteUserCmd.ExecuteNonQuery();
+                            //string deleteUserQuery = "DELETE FROM [User] WHERE CSV_id = @CSV_id";
+                            //SqlCommand deleteUserCmd = new SqlCommand(deleteUserQuery, connection, transaction);
+                            //deleteUserCmd.Parameters.AddWithValue("@CSV_id", csvId);
+                            //deleteUserCmd.ExecuteNonQuery();
 
                             // 5. Cuối cùng xóa CuuSV
                             string deleteCuuSVQuery = "DELETE FROM CuuSV WHERE CSV_id = @CSV_id";
