@@ -153,9 +153,10 @@ namespace qly_csv_app.UI.User
                 using (SqlConnection connection = new SqlConnection(connectString))
                 {
                     connection.Open();
-                    string query = @"SELECT u.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone
+                    string query = @"SELECT u.CSV_id, c.Ten, c.NgaySinh, c.MSSV, c.DC, c.email, c.phone, j.Vitri, j.CTY
                                     FROM [User] u
                                     INNER JOIN CuuSV c ON u.CSV_id = c.CSV_id
+                                    JOIN Job j ON c.CSV_id = j.CSV_id
                                     WHERE u.user_id = @user_id";
                     
                     SqlCommand command = new SqlCommand(query, connection);
@@ -177,6 +178,8 @@ namespace qly_csv_app.UI.User
                         txt_diachi.Text = reader["DC"]?.ToString();
                         txt_email.Text = reader["email"]?.ToString();
                         txt_phone.Text = reader["phone"]?.ToString();
+                        txt_congty.Text = reader["CTY"]?.ToString();
+                        txt_congviec.Text = reader["Vitri"]?.ToString();
                     }
                     else
                     {
@@ -909,8 +912,19 @@ namespace qly_csv_app.UI.User
                     command.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txt_phone.Text) ? (object)DBNull.Value : txt_phone.Text.Trim());
                     command.Parameters.AddWithValue("@CSV_id", currentCsvId);
 
+                    string updateJobQuery = @"UPDATE Job 
+                                               SET Vitri = @Vitri, CTY = @CTY
+                                               WHERE CSV_id = @CSV_id";
+
+                    SqlCommand updateJobCommand = new SqlCommand(updateJobQuery, connection);
+                    updateJobCommand.Parameters.AddWithValue("@Vitri", string.IsNullOrWhiteSpace(txt_congviec.Text) ? (object)DBNull.Value : txt_congviec.Text.Trim());
+                    updateJobCommand.Parameters.AddWithValue("@CTY", string.IsNullOrWhiteSpace(txt_congty.Text) ? (object)DBNull.Value : txt_congty.Text.Trim());
+                    updateJobCommand.Parameters.AddWithValue("@CSV_id", currentCsvId);
+
                     int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected > 0)
+                    int jobRowsAffected = updateJobCommand.ExecuteNonQuery();
+
+                    if (rowsAffected > 0 && jobRowsAffected > 0)
                     {
                         MessageBox.Show("Cập nhật thông tin cá nhân thành công!", "Thành công", 
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -924,8 +938,10 @@ namespace qly_csv_app.UI.User
                         MessageBox.Show("Không thể cập nhật thông tin!", "Lỗi", 
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+                    
+                    }
                 }
-            }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi cập nhật thông tin: " + ex.Message, "Lỗi", 

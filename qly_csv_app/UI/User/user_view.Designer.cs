@@ -53,6 +53,10 @@
             this.dataGridView_accepted_events = new System.Windows.Forms.DataGridView();
             this.label_accepted_events_title = new System.Windows.Forms.Label();
             this.panel_thongtin = new System.Windows.Forms.Panel();
+            this.txt_congty = new System.Windows.Forms.TextBox();
+            this.txt_congviec = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.btn_doimatkhau = new System.Windows.Forms.Button();
             this.btn_capnhat_thongtin = new System.Windows.Forms.Button();
             this.txt_phone = new System.Windows.Forms.TextBox();
@@ -368,6 +372,10 @@
             // 
             // panel_thongtin
             // 
+            this.panel_thongtin.Controls.Add(this.txt_congty);
+            this.panel_thongtin.Controls.Add(this.txt_congviec);
+            this.panel_thongtin.Controls.Add(this.label8);
+            this.panel_thongtin.Controls.Add(this.label7);
             this.panel_thongtin.Controls.Add(this.btn_doimatkhau);
             this.panel_thongtin.Controls.Add(this.btn_capnhat_thongtin);
             this.panel_thongtin.Controls.Add(this.txt_phone);
@@ -390,6 +398,44 @@
             this.panel_thongtin.TabIndex = 1;
             this.panel_thongtin.Visible = false;
             // 
+            // txt_congty
+            // 
+            this.txt_congty.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_congty.Location = new System.Drawing.Point(200, 430);
+            this.txt_congty.Name = "txt_congty";
+            this.txt_congty.Size = new System.Drawing.Size(300, 30);
+            this.txt_congty.TabIndex = 16;
+            // 
+            // txt_congviec
+            // 
+            this.txt_congviec.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_congviec.Location = new System.Drawing.Point(200, 380);
+            this.txt_congviec.Name = "txt_congviec";
+            this.txt_congviec.Size = new System.Drawing.Size(300, 30);
+            this.txt_congviec.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label8.Location = new System.Drawing.Point(60, 433);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 23);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Công ty";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label7.Location = new System.Drawing.Point(60, 383);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(89, 23);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Công việc";
+            // 
             // btn_doimatkhau
             // 
             this.btn_doimatkhau.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(193)))), ((int)(((byte)(7)))));
@@ -398,7 +444,7 @@
             this.btn_doimatkhau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_doimatkhau.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_doimatkhau.ForeColor = System.Drawing.Color.White;
-            this.btn_doimatkhau.Location = new System.Drawing.Point(352, 380);
+            this.btn_doimatkhau.Location = new System.Drawing.Point(352, 480);
             this.btn_doimatkhau.Name = "btn_doimatkhau";
             this.btn_doimatkhau.Size = new System.Drawing.Size(165, 40);
             this.btn_doimatkhau.TabIndex = 14;
@@ -414,7 +460,7 @@
             this.btn_capnhat_thongtin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_capnhat_thongtin.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_capnhat_thongtin.ForeColor = System.Drawing.Color.White;
-            this.btn_capnhat_thongtin.Location = new System.Drawing.Point(160, 380);
+            this.btn_capnhat_thongtin.Location = new System.Drawing.Point(160, 480);
             this.btn_capnhat_thongtin.Name = "btn_capnhat_thongtin";
             this.btn_capnhat_thongtin.Size = new System.Drawing.Size(158, 40);
             this.btn_capnhat_thongtin.TabIndex = 13;
@@ -567,7 +613,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1246, 450);
+            this.ClientSize = new System.Drawing.Size(1246, 550);
             this.Controls.Add(this.panel_content);
             this.Controls.Add(this.panel_sidebar);
             this.Name = "user_view";
@@ -582,6 +628,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.participationBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.quanLy_CSVDataSet)).EndInit();
             this.panel_sukienthamgia.ResumeLayout(false);
+            //this.panel_sukienthamgia.PersumeLayout();
             this.panel_sukienthamgia.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_accepted_events)).EndInit();
             this.panel_thongtin.ResumeLayout(false);
@@ -609,6 +656,10 @@
         private System.Windows.Forms.Button btn_tuchoi;
         private System.Windows.Forms.Label label_loimoi_title;
         private System.Windows.Forms.Panel panel_thongtin;
+        private System.Windows.Forms.TextBox txt_congty;
+        private System.Windows.Forms.TextBox txt_congviec;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btn_doimatkhau;
         private System.Windows.Forms.Button btn_capnhat_thongtin;
         private System.Windows.Forms.TextBox txt_phone;
