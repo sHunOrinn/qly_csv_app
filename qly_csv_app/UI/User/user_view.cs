@@ -922,59 +922,100 @@ namespace qly_csv_app.UI.User
 
         private void UpdatePersonalInfo()
         {
-            //txt_hoten.Enabled = true;
-            //dtp_ngaysinh.Enabled = true;
-            //txt_diachi.Enabled = true;
-            //txt_phone.Enabled = true;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectString))
                 {
                     connection.Open();
-                    string query = @"UPDATE CuuSV 
+                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // 1. Cập nhật thông tin cá nhân trong bảng CuuSV
+                            string query = @"UPDATE CuuSV 
                                     SET Ten = @Ten, NgaySinh = @NgaySinh, DC = @DC, phone = @phone
                                     WHERE CSV_id = @CSV_id";
-                    
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Ten", txt_hoten.Text.Trim());
-                    command.Parameters.AddWithValue("@NgaySinh", dtp_ngaysinh.Value.Date);
-                    command.Parameters.AddWithValue("@DC", string.IsNullOrWhiteSpace(txt_diachi.Text) ? (object)DBNull.Value : txt_diachi.Text.Trim());
-                    command.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txt_phone.Text) ? (object)DBNull.Value : txt_phone.Text.Trim());
-                    command.Parameters.AddWithValue("@CSV_id", currentCsvId);
 
-                    string updateJobQuery = @"UPDATE Job 
-                                               SET Vitri = @Vitri, CTY = @CTY
-                                               WHERE CSV_id = @CSV_id";
+                            SqlCommand command = new SqlCommand(query, connection, transaction);
+                            command.Parameters.AddWithValue("@Ten", txt_hoten.Text.Trim());
+                            command.Parameters.AddWithValue("@NgaySinh", dtp_ngaysinh.Value.Date);
+                            command.Parameters.AddWithValue("@DC", string.IsNullOrWhiteSpace(txt_diachi.Text) ? (object)DBNull.Value : txt_diachi.Text.Trim());
+                            command.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txt_phone.Text) ? (object)DBNull.Value : txt_phone.Text.Trim());
+                            command.Parameters.AddWithValue("@CSV_id", currentCsvId);
 
-                    SqlCommand updateJobCommand = new SqlCommand(updateJobQuery, connection);
-                    updateJobCommand.Parameters.AddWithValue("@Vitri", string.IsNullOrWhiteSpace(txt_congviec.Text) ? (object)DBNull.Value : txt_congviec.Text.Trim());
-                    updateJobCommand.Parameters.AddWithValue("@CTY", string.IsNullOrWhiteSpace(txt_congty.Text) ? (object)DBNull.Value : txt_congty.Text.Trim());
-                    updateJobCommand.Parameters.AddWithValue("@CSV_id", currentCsvId);
+                            int rowsAffected = command.ExecuteNonQuery();
 
-                    int rowsAffected = command.ExecuteNonQuery();
-                    int jobRowsAffected = updateJobCommand.ExecuteNonQuery();
+                            if (rowsAffected == 0)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Không thể cập nhật thông tin cá nhân!", "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
 
-                    if (rowsAffected > 0 && jobRowsAffected > 0)
-                    {
-                        MessageBox.Show("Cập nhật thông tin cá nhân thành công!", "Thành công", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        
-                        // Update welcome label if name changed
-                        currentUserName = txt_hoten.Text.Trim();
-                        SetWelcomeText(currentUserName);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không thể cập nhật thông tin!", "Lỗi", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                            // 2. Xử lý thông tin công việc
+                            string jobTitle = txt_congviec.Text?.Trim();
+                            string company = txt_congty.Text?.Trim();
 
-                    
+                            if (!string.IsNullOrEmpty(jobTitle) || !string.IsNullOrEmpty(company))
+                            {
+                                // Kiểm tra xem đã có record Job chưa
+                                string checkJobQuery = "SELECT COUNT(*) FROM Job WHERE CSV_id = @CSV_id";
+                                SqlCommand checkJobCommand = new SqlCommand(checkJobQuery, connection, transaction);
+                                checkJobCommand.Parameters.AddWithValue("@CSV_id", currentCsvId);
+
+                                int jobCount = (int)checkJobCommand.ExecuteScalar();
+
+                                if (jobCount > 0)
+                                {
+                                    // Cập nhật record hiện có
+                                    string updateJobQuery = @"UPDATE Job 
+                                                     SET Vitri = @Vitri, CTY = @CTY
+                                                     WHERE CSV_id = @CSV_id";
+
+                                    SqlCommand updateJobCommand = new SqlCommand(updateJobQuery, connection, transaction);
+                                    updateJobCommand.Parameters.AddWithValue("@Vitri", string.IsNullOrEmpty(jobTitle) ? (object)DBNull.Value : jobTitle);
+                                    updateJobCommand.Parameters.AddWithValue("@CTY", string.IsNullOrEmpty(company) ? (object)DBNull.Value : company);
+                                    updateJobCommand.Parameters.AddWithValue("@CSV_id", currentCsvId);
+
+                                    updateJobCommand.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    // Tạo record mới
+                                    string insertJobQuery = @"INSERT INTO Job (Vitri, CTY, CSV_id)
+                                                     VALUES (@Vitri, @CTY, @CSV_id)";
+
+                                    SqlCommand insertJobCommand = new SqlCommand(insertJobQuery, connection, transaction);
+                                    insertJobCommand.Parameters.AddWithValue("@Vitri", string.IsNullOrEmpty(jobTitle) ? (object)DBNull.Value : jobTitle);
+                                    insertJobCommand.Parameters.AddWithValue("@CTY", string.IsNullOrEmpty(company) ? (object)DBNull.Value : company);
+                                    insertJobCommand.Parameters.AddWithValue("@CSV_id", currentCsvId);
+
+                                    insertJobCommand.ExecuteNonQuery();
+                                }
+                            }
+
+                            // Commit transaction
+                            transaction.Commit();
+
+                            MessageBox.Show("Cập nhật thông tin cá nhân thành công!", "Thành công",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Update welcome label if name changed
+                            currentUserName = txt_hoten.Text.Trim();
+                            SetWelcomeText(currentUserName);
+                        }
+                        catch (Exception innerEx)
+                        {
+                            transaction.Rollback();
+                            throw innerEx;
+                        }
                     }
                 }
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi cập nhật thông tin: " + ex.Message, "Lỗi", 
+                MessageBox.Show("Lỗi khi cập nhật thông tin: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
