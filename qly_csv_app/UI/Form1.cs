@@ -18,6 +18,7 @@ using qly_csv_app.UI.User;
 
 namespace qly_csv_app
 {
+    //coment
     public partial class Form1 : Form
     {
         public string connectString = ConfigurationManager.ConnectionStrings["sa"].ConnectionString;
